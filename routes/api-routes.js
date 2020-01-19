@@ -8,6 +8,10 @@
 // Grabbing our models
 
 var db = require("../models");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const SECRET_KEY = "hi12!@hghh@##2jjekllsol";
 
 // Routes
 // =============================================================
@@ -18,6 +22,14 @@ module.exports = function (app) {
         db.User.findAll({}).then(function (dbUser) {
             res.json(dbUser);
         });
+    });
+
+    // GET Users by username
+    app.get("/api/users/:username", (req, res) => {
+        db.User.findOne({ where: { username: req.params.username } })
+            .then(function (dbUser) {
+                res.status(200).json(dbUser);
+            });
     });
 
     // PUT route for updating users. The updated user will be available in req.body
@@ -38,6 +50,15 @@ module.exports = function (app) {
 
     // post for register, JWT Auth
     app.post("/register", function (req, res) {
-        res.status(200).json({ Authtoken: '' });
+        const username = req.body.username;
+        const password = bcrypt.hashSync(req.body.password);
+
+        db.User.create({ username, password }).then(function (dbUser) {
+            const expiresIn = 24 * 60 * 60;
+            const accessToken = jwt.sign({ id: dbUser.id }, SECRET_KEY, { expiresIn });
+            res.status(200).json({ "user": dbUser, "access_token": accessToken, "expires_in": expiresIn });
+        }).catch(err => {
+            res.status(500).json(err.stack);
+        });
     });
 };
