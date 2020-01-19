@@ -2,17 +2,25 @@
   "name": "timely-task",
   "version": "1.0.0",
   "description": "A Task scheduler system of sorts that includes an Admin side for custom jobs",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest test/*.test.js --verbose",
+    "run": "node server.js",
+    "watch": "nodemon server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chrisp-dev/timely-task.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "NodeJS",
+    "MVC",
+    "MySQL",
+    "Sequelize",
+    "Task Force Manager"
+  ],
+  "author": "Chris Paradeise",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/chrisp-dev/timely-task/issues"
   },
