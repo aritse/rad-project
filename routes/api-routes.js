@@ -45,7 +45,24 @@ module.exports = function (app) {
 
     // post for login, JWT Auth
     app.post("/login", function (req, res) {
-        res.status(200).json({ Authtoken: '' });
+        const username = req.body.username;
+        const password = req.body.password;
+
+        db.User.findOne({
+            where: {
+                username
+            }
+        }).then(function (user) {
+            if (!user) return res.status(404).json("No user found");
+            const result = bcrypt.compareSync(password, user.password);
+            if (!result) return res.status(401).json("Password incorrect");
+
+            const expiresIn = 24 * 60 * 60;
+            const accessToken = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn });
+            res.status(200).json({ user, "access_token": accessToken, "expires_in": expiresIn });
+        }).catch(err => {
+            res.status(500).send(err.stack);
+        });
     });
 
     // post for register, JWT Auth
