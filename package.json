@@ -31,6 +31,8 @@
     "express-handlebars": "^3.1.0",
     "handlebars-form-helpers": "^0.1.4",
     "hbs": "^4.1.0",
+    "handlebars": "^4.7.2",
+    "handlebars-form-helpers": "^0.1.4",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.1.0",
     "sequelize": "^5.21.3"
