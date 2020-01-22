@@ -1,4 +1,4 @@
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   const ServiceRequest = sequelize.define("ServiceRequest", {
     status: DataTypes.STRING,
     streetAddress: DataTypes.STRING,
@@ -9,9 +9,9 @@ module.exports = function(sequelize, DataTypes) {
     endTime: DataTypes.DATE
   });
 
-  ServiceRequest.associate = function(models) {
+  ServiceRequest.associate = function (models) {
     ServiceRequest.belongsTo(models.Customer, { foreignKey: { allowNull: false } });
-    ServiceRequest.hasOne(models.ServiceMenu);
+    ServiceRequest.belongsTo(models.ServiceMenu);
     ServiceRequest.hasMany(models.Assignment, { onDelete: "CASCADE" });
     ServiceRequest.belongsToMany(models.HandyMan, { through: models.Assignment });
   };
