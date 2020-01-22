@@ -1,5 +1,7 @@
 const express = require('express');
 const hbs = require('express-handlebars');
+var hbs2 = require('hbs');
+require('handlebars-form-helpers').register(hbs2.handlebars);
 const app = express();
 const PORT = process.env.PORT || 3300;
 const db = require('./models');
