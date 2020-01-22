@@ -1,4 +1,4 @@
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   const HandyMan = sequelize.define("HandyMan", {
     employeeId: { type: DataTypes.INTEGER, primaryKey: true },
     firstName: DataTypes.STRING,
@@ -11,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
     phoneNumber: DataTypes.STRING
   });
 
-  HandyMan.associte = function(models) {
+  HandyMan.associte = function (models) {
+    HandyMan.belongsTo(models.User, { onDelete: "CASCADE" });
     HandyMan.hasMany(models.Assignment, { onDelete: "CASCADE" });
     HandyMan.belongsToMany(models.ServiceRequest, { through: models.Assignment });
   };
