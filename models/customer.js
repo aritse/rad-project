@@ -5,10 +5,14 @@ module.exports = function(sequelize, DataTypes) {
     streetAddress: DataTypes.STRING,
     city: DataTypes.STRING,
     state: DataTypes.STRING,
-    zipcode: DataTypes.STRING,
+    zipCode: DataTypes.STRING,
     email: DataTypes.STRING,
     phoneNumber: DataTypes.STRING
   });
+
+  Customer.associte = function(models) {
+    Customer.hasMany(models.ServiceRequest, { onDelete: "CASCADE" });
+  };
 
   return Customer;
 };
