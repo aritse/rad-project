@@ -13,10 +13,10 @@ app.use(express.json());
 app.use(express.static("public"));
 
 require("./routes/html-routes")(app);
-require("./routes/api-routes")(app);
+require("./routes/customer-routes")(app);
 
-db.sequelize.sync({ force: true }).then(function() {
-  app.listen(PORT, function(err) {
+db.sequelize.sync({ force: true }).then(function () {
+  app.listen(PORT, function (err) {
     if (err) throw err;
     console.log("Server Listening on http://localhost:" + PORT);
   });
