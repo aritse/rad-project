@@ -7,5 +7,10 @@ module.exports = function (app) {
         res.render("index");
     });
 
+    // GET route for creating a login
+    app.get("/register", function (req, res) {
+        res.render("signup");
+    });
+
 
 };
