@@ -11,61 +11,64 @@ var db = require("../models");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = "hi12!@hghh@##2jjekllsol";
+const SECRET_KEY = "h22@@i@!12hghh@#2jjekllsol";
 
 // Routes
 // =============================================================
 module.exports = function (app) {
 
     // GET route for getting all of the users
-    app.get("/api/customers", function (req, res) {
-        db.Customer.findAll({}).then(function (dbUser) {
-            res.json(dbUser);
+    app.get("/api/handymans", function (req, res) {
+        db.Handyman.findAll({}).then(function (dbHandyman) {
+            res.json(dbHandyman);
         });
     });
 
     // GET Customer by ID
-    app.get("/api/customers/:id", (req, res) => {
-        db.Customer.findOne({ where: { id: req.params.id } })
-            .then(function (dbCustomer) {
-                res.status(200).json(dbCustomer);
+    app.get("/api/handymans/:id", (req, res) => {
+        db.Handyman.findOne({ where: { id: req.params.id } })
+            .then(function (dbHandyman) {
+                res.status(200).json(dbHandyman);
+            }).catch(err => {
+                res.status(404).end();
             });
     });
 
-    // This is Customer updating their info
-    // PUT route for updating users. The updated Customer data will be available in req.body
-    app.put("/api/customers/:id", function (req, res) {
-        db.Customer.update(req.body, {
+    // This is Handyman updating their info
+    // PUT route for updating users. The updated Handyman data will be available in req.body
+    app.put("/api/handymans/:id", function (req, res) {
+        db.Handyman.update(req.body, {
             where: {
                 id: req.params.id
             }
-        }).then(function (dbCustomer) {
-            res.json(dbCustomer);
+        }).then(function (dbHandyman) {
+            res.json(dbHandyman);
         });
     });
 
     // post for Customer login, JWT Auth
-    app.post("/login", function (req, res) {
+    app.post("/handyman-login", function (req, res) {
         const username = req.body.username;
         const password = req.body.password;
 
         db.User.findOne({
             where: {
                 username
-            }
+            },
+            include: [db.Handyman] // this might now work, we create user then create handyman, no auto Handyman association on User table
         }).then(function (user) {
             if (!user) return res.status(404).json("No user found");
             const result = bcrypt.compareSync(password, user.password);
             if (!result) return res.status(401).json("Password incorrect");
 
-            db.Customer.findOne({
+            db.Handyman.findOne({
                 where: {
                     UserId: user.id
                 }
-            }).then(customer => {
+            }).then(handyman => {
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn });
-                res.status(200).json({ user, customer, "access_token": accessToken, "expires_in": expiresIn });
+                res.status(200).json({ user, handyman, "access_token": accessToken, "expires_in": expiresIn });
             })
         }).catch(err => {
             res.status(500).send(err.stack);
@@ -73,35 +76,34 @@ module.exports = function (app) {
     });
 
     // post for register, JWT Auth
-    app.post("/register", function (req, res) {
-        console.log("post register");
+    app.post("/handyman-register", function (req, res) {
         const username = req.body.username;
         const password = bcrypt.hashSync(req.body.password);
-        const isAdmin = req.body.isAdmin || 0;
+        const isAdmin = req.body.isAdmin || 1;
 
         db.User.create({ username, password, isAdmin }).then(function (dbUser) {
-            const customer = {
+            const handyman = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 streetAddress: req.body.address,
                 city: req.body.city,
                 state: req.body.state,
                 email: req.body.email,
-                zipCode: req.body.zipcode,
                 phoneNumber: req.body.phoneNumber,
                 UserId: dbUser.id
             }
 
-            db.Customer.create(customer).then(function (dbCustomer) {
+            db.Handyman.create(handyman).then(function (dbHandyman) {
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign({ id: dbUser.id }, SECRET_KEY, { expiresIn });
-                res.status(200).json({ "user": dbUser, "customerInfo": dbCustomer, "access_token": accessToken, "expires_in": expiresIn });
+                res.status(200).json({ "user": dbUser, "handymanInfo": dbHandyman, "access_token": accessToken, "expires_in": expiresIn });
             }).catch(err => {
                 res.status(500).json(err.stack);
             })
         }).catch(err => {
-            console.log(err);
             res.status(500).json(err.stack);
         });
     });
 };
+
+

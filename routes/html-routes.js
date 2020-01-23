@@ -11,7 +11,7 @@ module.exports = function (app) {
 
     // GET route for creating a login
     app.get("/register", function (req, res) {
-        res.render("signup");
+        res.render("register");
     });
 
     app.get("/service-menu", function (req, res){
