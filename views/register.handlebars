@@ -3,7 +3,8 @@
 
     <div class="wrapper">
         <h2>Create New Customer Account</h2>
-        <form action="/register" method="post" role="form" enctype="application/x-www-form-urlencoded">
+        {{!-- <form action="/register" method="post" role="form" enctype="application/x-www-form-urlencoded"> --}}
+         <form role="form" enctype="application/x-www-form-urlencoded">
                  <div class="form-group">
                     <label for="username">User Name</label>
                     <input type="text" class="form-control" name="username" id="username" placeholder="Enter a Unique User Name">
@@ -51,10 +52,10 @@
                     <label for="email">Email Address</label>
                     <input type="text" class="form-control" name="email" id="email" placeholder="Email Address">
                 </div>
-
+         </form>
                
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary" id="reg-submit-btn">Submit</button>
                  
             </form>
         </div>
