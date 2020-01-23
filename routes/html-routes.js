@@ -9,7 +9,7 @@ module.exports = function (app) {
         res.render("index");
     });
 
-    // GET route for creating a login
+    // GET route for creating a register
     app.get("/register", function (req, res) {
         res.render("register");
     });
@@ -24,4 +24,11 @@ module.exports = function (app) {
     //       })
     //       .catch(err => console.log(err));
     // })
+
+    // GET route for creating a register
+    app.get("/login", function (req, res) {
+        res.render("login");
+    });
+
+
 };

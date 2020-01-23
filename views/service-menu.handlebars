@@ -3,7 +3,7 @@
         <select name="Services" id="servicesDropdown">
             <option value="none">Select the service you need</option>
             {{#each servicemenus}}
-            <option value={{title}}>{{title}} will take {{manHour}} hours</option>
+            <option value={{id}}>{{title}} will take {{manHour}} hours</option>
             {{/each}}
         </select>
 
@@ -13,8 +13,8 @@
 <div class = "container">
     <div class = "wrapper">
         <form>
-            <input type="month" min = "2020-01" id ="serviceCalendar">
-            <input type="submit" value="Select a date">
+            <input type="date" min = "2020-01" id ="serviceCalendar">
+            <input type="submit" value="Select a date" id = "calendarSubmit">
         </form>
     </div>
 </div>
