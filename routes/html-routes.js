@@ -1,5 +1,7 @@
 // HTML Routes
 // =============================================================
+
+const db = require("../models");
 module.exports = function (app) {
 
     // GET route for getting all of the todos
@@ -12,5 +14,14 @@ module.exports = function (app) {
         res.render("signup");
     });
 
-
+    app.get("/service-menu", function (req, res){
+        db.ServiceMenu.findAll({raw:true}).then(function(data) {
+            console.log(data);
+            var datObject = {
+                servicemenus: data
+            };
+            res.render("service-menu", datObject);
+          })
+          .catch(err => console.log(err));
+    })
 };
