@@ -11,8 +11,6 @@ var db = require("../models");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = "hi12!@hghh@##2jjekllsol";
-
 // Routes
 // =============================================================
 module.exports = function (app) {
@@ -53,18 +51,20 @@ module.exports = function (app) {
             where: {
                 username
             }
-        }).then(function (user) {
-            if (!user) return res.status(404).json("No user found");
-            const result = bcrypt.compareSync(password, user.password);
+        }).then(function (dbUser) {
+            if (!dbUser) return res.status(404).json("No user found");
+            const result = bcrypt.compareSync(password, dbUser.password);
             if (!result) return res.status(401).json("Password incorrect");
 
             db.Customer.findOne({
                 where: {
-                    UserId: user.id
+                    UserId: dbUser.id
                 }
             }).then(customer => {
+                if (!customer) return res.status(404).json("No User Found");
+                const user = { id: dbUser.id, username: dbUser.username };
                 const expiresIn = 24 * 60 * 60;
-                const accessToken = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn });
+                const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, customer, "access_token": accessToken, "expires_in": expiresIn });
             })
         }).catch(err => {
@@ -92,7 +92,7 @@ module.exports = function (app) {
 
             db.Customer.create(customer).then(function (dbCustomer) {
                 const expiresIn = 24 * 60 * 60;
-                const accessToken = jwt.sign({ id: dbUser.id }, SECRET_KEY, { expiresIn });
+                const accessToken = jwt.sign({ id: dbUser.id }, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ "user": dbUser, "customerInfo": dbCustomer, "access_token": accessToken, "expires_in": expiresIn });
             }).catch(err => {
                 res.status(500).json(err.stack);
