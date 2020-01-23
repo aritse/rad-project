@@ -74,6 +74,7 @@ module.exports = function (app) {
 
     // post for register, JWT Auth
     app.post("/register", function (req, res) {
+        console.log("post register");
         const username = req.body.username;
         const password = bcrypt.hashSync(req.body.password);
         const isAdmin = req.body.isAdmin || 0;
@@ -86,6 +87,7 @@ module.exports = function (app) {
                 city: req.body.city,
                 state: req.body.state,
                 email: req.body.email,
+                zipCode: req.body.zipcode,
                 phoneNumber: req.body.phoneNumber,
                 UserId: dbUser.id
             }
@@ -98,6 +100,7 @@ module.exports = function (app) {
                 res.status(500).json(err.stack);
             })
         }).catch(err => {
+            console.log(err);
             res.status(500).json(err.stack);
         });
     });
