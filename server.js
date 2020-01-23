@@ -1,3 +1,7 @@
+const express = require('express');
+const hbs = require('express-handlebars');
+var hbs2 = require('hbs');
+require('handlebars-form-helpers').register(hbs2.handlebars);
 const express = require("express");
 const hbs = require("express-handlebars");
 const app = express();
@@ -16,6 +20,7 @@ require("./routes/html-routes")(app);
 require("./routes/customer-routes")(app);
 require("./routes/handyman-routes")(app);
 require("./routes/service-menu-routes")(app);
+require("./routes/service-request-routes")(app);
 
 db.sequelize.sync().then(function () {
   app.listen(PORT, function (err) {
