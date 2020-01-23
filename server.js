@@ -16,7 +16,9 @@ app.use(express.static("public"));
 
 require("./routes/html-routes")(app);
 require("./routes/customer-routes")(app);
+require("./routes/handyman-routes")(app);
 require("./routes/service-menu-routes")(app);
+require("./routes/service-request-routes")(app);
 
 db.sequelize.sync({force:true}).then(function() {
   app.listen(PORT, function(err) {
