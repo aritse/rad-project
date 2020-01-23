@@ -6,10 +6,7 @@ module.exports = function (sequelize, DataTypes) {
   });
 
   User.associate = function (models) {
-    User.hasOne(models.HandyMan, {
-      allowNull: true
-    });
-
+    User.hasOne(models.HandyMan, { allowNull: true });
     User.hasOne(models.Customer, { allowNull: true });
   }
 
