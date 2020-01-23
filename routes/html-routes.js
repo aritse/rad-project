@@ -13,15 +13,15 @@ module.exports = function (app) {
     app.get("/register", function (req, res) {
         res.render("register");
     });
-
-    app.get("/service-menu", function (req, res){
-        db.ServiceMenu.findAll({raw:true}).then(function(data) {
-            console.log(data);
-            var datObject = {
-                servicemenus: data
-            };
-            res.render("service-menu", datObject);
-          })
-          .catch(err => console.log(err));
-    })
+            //this is covered in service-menu-routes
+    // app.get("/service-menu", function (req, res){
+    //     db.ServiceMenu.findAll({raw:true}).then(function(data) {
+    //         console.log(data);
+    //         var datObject = {
+    //             servicemenus: data
+    //         };
+    //         res.render("service-menu", datObject);
+    //       })
+    //       .catch(err => console.log(err));
+    // })
 };
