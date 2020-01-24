@@ -8,6 +8,16 @@ module.exports = function (app) {
       res.redirect("/service-menu");
     });
   });
+  //this is covered in service-menu-routes
+  app.get("/service-menu", function (req, res) {
+    db.ServiceMenu.findAll({ raw: true }).then(function (data) {
+      var datObject = {
+        servicemenus: data
+      };
+      res.render("service-menu", datObject);
+    })
+      .catch(err => console.log(err));
+  })
   app.get("/api/menu", function (req, res) {
     db.ServiceMenu.findAll({ raw: true }).then(function (dbServiceMenu) {
       res.render("service-menu", { servicemenus: dbServiceMenu });
