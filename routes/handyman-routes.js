@@ -62,34 +62,48 @@ module.exports = function (app) {
         db.User.findOne({
             where: {
                 username
-            },
-            include: [db.HandyMan]
-        }).then(function (user) {
-            if (!user) {
+            }
+        }).then(function (dbUser) {
+            if (!dbUser) {
                 req.session.user = false;
                 req.session.error = "No User Found";
                 return res.status(404).json("No user found");
             }
-            const result = bcrypt.compareSync(password, user.password);
+            const result = bcrypt.compareSync(password, dbUser.password);
             if (!result) return res.status(401).json("Username or Password incorrect");
 
             db.HandyMan.findOne({
                 where: {
-                    UserId: user.id
+                    UserId: dbUser.id
                 }
             }).then(handyman => {
-                if (!handyman) return res.status(404).json("No User Found");
+                if (!handyman) {
+                    req.session.user = false;
+                    req.session.error = "No User Found";
+                    return res.status(404).json("No User Found");
+                }
+                const user = { id: user.id, username: user.username };
                 const expiresIn = 24 * 60 * 60;
-                const accessToken = jwt.sign({ id: user.id, username: user.username }, process.env.SESSION_SECRET, { expiresIn });
+                const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
 
-                res.status(200).json({ handyman, "access_token": accessToken, "expires_in": expiresIn });
+                res.status(200).json({ user, handyman, "access_token": accessToken, "expires_in": expiresIn });
             })
         }).catch(err => {
-            res.status(500).send(err.stack);
+            req.session.user = false;
+            req.session.error = "Failed creating handyman";
+            if (err.parent && err.parent.sqlMessage) {
+                return res.status(500).json(err.parent.sqlMessage);
+            } else {
+                return res.status(500).json(err.stack);
+            }
         });
     });
 
-    // post for register, JWT Auth
+    /**
+     * ROUTE: /handyman-register
+     * @description POST request for creating a new Handyman User
+     * @accepts User and Handyman information over req.body
+     */
     app.post("/handyman-register", function (req, res) {
         const username = req.body.username;
         const password = bcrypt.hashSync(req.body.password);
@@ -103,7 +117,7 @@ module.exports = function (app) {
                 streetAddress: req.body.address,
                 city: req.body.city,
                 state: req.body.state,
-                zipCode: req.body.zipCode,
+                zipCode: req.body.zipcode,
                 email: req.body.email,
                 phoneNumber: req.body.phoneNumber,
                 UserId: dbUser.id
@@ -114,10 +128,14 @@ module.exports = function (app) {
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, "handymanInfo": dbHandyman, "access_token": accessToken, "expires_in": expiresIn });
             }).catch(err => {
+                req.session.user = false;
+                req.session.error = "Failed creating handyman";
                 res.status(500).json(err.stack);
             })
         }).catch(err => {
-            res.status(500).json(err.stack);
+            req.session.user = false;
+            req.session.error = "Failed creating User prior to handyman";
+            res.status(500).json(err.parent.sqlMessage);
         });
     });
 };

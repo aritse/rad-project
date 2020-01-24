@@ -1,0 +1,36 @@
+<button id="addServiceBtn" class="btn btn-primary">Toggle Add Service</button>
+<form action="/api/menu" method="POST" id="addServiceForm" role="form">
+    <div>
+        <label>Title</label>
+        <input type="text" name="title" id="title">
+    </div>
+    <div>
+        <label>Man Hours required</label>
+        <input type="number" name="manHour" id="manHour">
+    </div>
+    <div>
+        <label># Of Handymen</label>
+        <input type="text" name="numberOfHandyman" id="numberOfHandyman">
+    </div>
+    <button type="submit" id="addServiceSubmitBtn">Submit New Service</button>
+</form>
+<div class="container">
+    <div class="wrapper">
+        <select name="Services" id="servicesDropdown">
+            <option value="none">Select the service you need</option>
+            {{#each servicemenus}}
+            <option value={{id}}>{{title}} will take {{manHour}} hours</option>
+            {{/each}}
+        </select>
+
+
+    </div>
+</div>
+<div class="container">
+    <div class="wrapper">
+        <form>
+            <input type="date" min="2020-01" id="serviceCalendar">
+            <input type="submit" value="Select a date" id="calendarSubmit">
+        </form>
+    </div>
+</div>
