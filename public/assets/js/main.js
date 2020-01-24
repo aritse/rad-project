@@ -30,8 +30,8 @@ $(document).ready(function () {
     const userData = {
       username: $("#username").val().trim(),
       password: $("#password").val().trim(),
-      first_name: $("#first_name").val().trim(),
-      last_name: $("#last_name").val().trim(),
+      firstName: $("#first_name").val().trim(),
+      lastName: $("#last_name").val().trim(),
       address: $("#address").val().trim(),
       city: $("#city").val().trim(),
       state: $("#state").val().trim(),
@@ -47,8 +47,10 @@ $(document).ready(function () {
       data: userData
     }).then(
       function (data) {
+
         // store user in local storage
         localStorage.setItem("user", JSON.stringify(data));
+
         // Reload the page to get the updated list
         location.href = "/service-menu";
       }
