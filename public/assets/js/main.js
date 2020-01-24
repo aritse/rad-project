@@ -13,8 +13,8 @@ console.log("main.js");
     const userData = {
       username: $("#username").val().trim(),
       password: $("#password").val().trim(),
-      first_name: $("#first_name").val().trim(),
-      last_name: $("#last_name").val().trim(),
+      firstName: $("#first_name").val().trim(),
+      lastName: $("#last_name").val().trim(),
       address: $("#address").val().trim(),
       city: $("#city").val().trim(),
       state: $("#state").val().trim(),

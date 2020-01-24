@@ -7,7 +7,7 @@ module.exports = function (app) {
         res.render("index");
     });
 
-    // GET route for creating a register
+   // GET route for creating a register
     app.get("/register", function (req, res) {
         res.render("register");
     });

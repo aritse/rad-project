@@ -29,7 +29,7 @@ require("./routes/handyman-routes")(app);
 require("./routes/service-menu-routes")(app);
 require("./routes/service-request-routes")(app);
 
-db.sequelize.sync({force:false}).then(function() {
+db.sequelize.sync({force:true}).then(function() {
   app.listen(PORT, function(err) {
     if (err) throw err;
     console.log("Server Listening on http://localhost:" + PORT);
