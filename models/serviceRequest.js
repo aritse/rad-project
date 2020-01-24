@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
 
   ServiceRequest.associate = function(models) {
     ServiceRequest.belongsTo(models.Customer, { foreignKey: { allowNull: false } });
-    ServiceRequest.belongsTo(models.ServiceMenu);
+    ServiceRequest.belongsTo(models.ServiceMenu, { allowNull: false });
     ServiceRequest.hasMany(models.Assignment, { onDelete: "CASCADE" });
     ServiceRequest.belongsToMany(models.HandyMan, { through: models.Assignment });
   };

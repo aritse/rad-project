@@ -1,14 +1,14 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   const User = sequelize.define("User", {
-    username: DataTypes.STRING,
+    username: { type: DataTypes.STRING, unique: true },
     password: DataTypes.STRING,
-    isAdmin: DataTypes.BOOLEAN
+    isAdmin: { type: DataTypes.BOOLEAN, defaultValue: false }
   });
 
-  User.associate = function (models) {
-    User.hasOne(models.HandyMan, { allowNull: true });
-    User.hasOne(models.Customer, { allowNull: true });
-  }
+  User.associate = function(models) {
+    User.hasOne(models.Customer, { onDelete: "CASCADE" });
+    User.hasOne(models.HandyMan, { onDelete: "CASCADE" });
+  };
 
   return User;
 };
