@@ -16,7 +16,11 @@ module.exports = function (app) {
     app.get("/login", function (req, res) {
         res.render("login");
     });
-    
-    //GET route for 
+
+
+    app.get("/handyman-login", function (req, res) {
+        res.render("handyman-login");
+    });
+
 
 };
