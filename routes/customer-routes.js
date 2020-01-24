@@ -6,6 +6,37 @@ const jwt = require('jsonwebtoken');
 // =============================================================
 module.exports = function (app) {
 
+    // update customer info view
+    app.get("/customer-info", function (req, res) {
+        // if (!req.session.user) {
+        //     req.session.user = false;
+        //     req.session.error = "No session, please login"
+        //     return res.redirect("/");
+        // } else {
+        req.session.user = { id: 1, username: "Han2" }
+        db.Customer.findOne({
+            where: {
+                UserId: req.session.user.id
+            },
+            include: [db.User]
+        }).then(dbCustomer => {
+            const customer = {
+                id: dbCustomer.id,
+                firstName: dbCustomer.firstName,
+                lastName: dbCustomer.lastName,
+                streetAddress: dbCustomer.streetAddress,
+                city: dbCustomer.city,
+                state: dbCustomer.state,
+                zipCode: dbCustomer.zipCode,
+                phoneNumber: dbCustomer.phoneNumber,
+                email: dbCustomer.email,
+                userId: dbCustomer.userId
+            }
+            res.render("customer-info", customer);
+        });
+        // }
+    });
+
     /**
      * ROUTE - /api/customers
      * @description Get all customers
@@ -69,6 +100,8 @@ module.exports = function (app) {
                 if (!customer) return res.status(404).json("No User Found");
                 const user = { id: dbUser.id, username: dbUser.username };
                 const expiresIn = 24 * 60 * 60;
+                req.session.user = user;
+                req.session.error = "";
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, customer, "access_token": accessToken, "expires_in": expiresIn });
             })
@@ -109,6 +142,8 @@ module.exports = function (app) {
             }
 
             db.Customer.create(customer).then(function (dbCustomer) {
+                req.session.user = user;
+                req.session.error = "";
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, "customerInfo": dbCustomer, "access_token": accessToken, "expires_in": expiresIn });

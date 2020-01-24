@@ -3,7 +3,7 @@ var db = require("../models");
 module.exports = function(app) {
   app.post("/api/request", function(req, res) {
     db.ServiceRequest.create(req.body).then(function(dbServiceRequest) {
-      res.json(dbServiceRequest);
+      res.render("confirm", dbServiceRequest);
     });
   });
 

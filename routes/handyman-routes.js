@@ -83,6 +83,8 @@ module.exports = function (app) {
                     return res.status(404).json("No User Found");
                 }
                 const user = { id: user.id, username: user.username };
+                req.session.user = user;
+                req.session.error = "";
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
 
@@ -124,6 +126,8 @@ module.exports = function (app) {
             }
 
             db.HandyMan.create(handyman).then(function (dbHandyman) {
+                req.session.user = user;
+                req.session.error = "";
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, "handymanInfo": dbHandyman, "access_token": accessToken, "expires_in": expiresIn });

@@ -36,6 +36,7 @@
     "hbs": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "material-design-icons": "^3.0.1",
+    "materialize": "^1.0.0",
     "materialize-css": "^1.0.0-rc.2",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.2",
