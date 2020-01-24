@@ -13,7 +13,7 @@ body {
     background-color: salmon;
 }
 
-#selectedService{
+#selectedService {
     background-color: azure;
     border: none
 }
@@ -45,7 +45,7 @@ button {
     margin: 2px;
 }
 
-#addServiceSubmitBtn {
+#addServiceSubmitBtn, #submit-login-btn {
     padding: 5px;
     border-radius: 8px;
     color: white;
@@ -53,7 +53,7 @@ button {
     border: 1px solid green;
 }
 
-#servicesDropdown{
+#servicesDropdown {
     padding: 2px;
     margin: 2px;
 }
@@ -65,4 +65,27 @@ button {
 
 #calendarSubmit {
     padding: 4px;
+}
+
+.login-wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0 auto;
+    margin-top: 15px;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid gray;
+    box-shadow: 2px 2px 4px white;
+}
+
+.container {
+    max-width: 946px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+#welcomeMessage {
+    margin: 15px 0;
+    color: red;
+    text-shadow: 2px 2px white;
 }

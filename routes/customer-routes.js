@@ -1,12 +1,3 @@
-// *********************************************************************************
-// api-routes.js - this file offers a set of routes for displaying and saving data to the db
-// *********************************************************************************
-
-// Dependencies
-// =============================================================
-
-// Grabbing our models
-
 var db = require("../models");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -15,14 +6,21 @@ const jwt = require('jsonwebtoken');
 // =============================================================
 module.exports = function (app) {
 
-    // GET route for getting all of the users
+    /**
+     * ROUTE - /api/customers
+     * @description Get all customers
+     */
     app.get("/api/customers", function (req, res) {
         db.Customer.findAll({}).then(function (dbUser) {
             res.json(dbUser);
         });
     });
 
-    // GET Customer by ID
+    /**
+     * ROUTE - /api/customers/:id
+     * @description Get customer by ID
+     * @expects id to be on req.params (url parameter)
+     */
     app.get("/api/customers/:id", (req, res) => {
         db.Customer.findOne({ where: { id: req.params.id } })
             .then(function (dbCustomer) {
@@ -30,8 +28,10 @@ module.exports = function (app) {
             });
     });
 
-    // This is Customer updating their info
-    // PUT route for updating users. The updated Customer data will be available in req.body
+    /**
+     * ROUTE - /api/customers/:id
+     * @description PUT route for updating users. The updated Customer data will be available in req.body
+     */
     app.put("/api/customers/:id", function (req, res) {
         db.Customer.update(req.body, {
             where: {
@@ -42,7 +42,12 @@ module.exports = function (app) {
         });
     });
 
-    // post for Customer login, JWT Auth
+    /**
+     * ROUTE - /login
+     * @description Customer Login
+     * @expects User info on req.body, username & password
+     * @returns Auth token, User and Customer info
+     */
     app.post("/login", function (req, res) {
         const username = req.body.username;
         const password = req.body.password;
@@ -68,17 +73,29 @@ module.exports = function (app) {
                 res.status(200).json({ user, customer, "access_token": accessToken, "expires_in": expiresIn });
             })
         }).catch(err => {
-            res.status(500).send(err.stack);
+            req.session.user = false;
+            req.session.error = "Failed creating customer";
+            if (err.parent && err.parent.sqlMessage) {
+                res.status(500).json(err.parent.sqlMessage);
+            } else {
+                res.status(500).json(err.stack);
+            }
         });
     });
 
-    // post for register, JWT Auth
+    /**
+     * ROUTE - /register
+     * @description Create new User and Customer
+     * @expects User and Customer info in req.body
+     * @returns Auth token, User and Customer info
+     */
     app.post("/register", function (req, res) {
         const username = req.body.username;
         const password = bcrypt.hashSync(req.body.password);
         const isAdmin = req.body.isAdmin || 0;
 
         db.User.create({ username, password, isAdmin }).then(function (dbUser) {
+            const user = { id: dbUser.id, username: dbUser.username };
             const customer = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
@@ -93,14 +110,25 @@ module.exports = function (app) {
 
             db.Customer.create(customer).then(function (dbCustomer) {
                 const expiresIn = 24 * 60 * 60;
-                const accessToken = jwt.sign({ id: dbUser.id }, process.env.SESSION_SECRET, { expiresIn });
-                res.status(200).json({ "user": dbUser, "customerInfo": dbCustomer, "access_token": accessToken, "expires_in": expiresIn });
+                const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
+                res.status(200).json({ user, "customerInfo": dbCustomer, "access_token": accessToken, "expires_in": expiresIn });
             }).catch(err => {
-                res.status(500).json(err.stack);
+                req.session.user = false;
+                req.session.error = "Failed creating customer";
+                if (err.parent && err.parent.sqlMessage) {
+                    res.status(500).json(err.parent.sqlMessage);
+                } else {
+                    res.status(500).json(err.stack);
+                }
             })
         }).catch(err => {
-            console.log(err);
-            res.status(500).json(err.stack);
+            req.session.user = false;
+            req.session.error = "Failed creating customer";
+            if (err.parent && err.parent.sqlMessage) {
+                res.status(500).json(err.parent.sqlMessage);
+            } else {
+                res.status(500).json(err.stack);
+            }
         });
     });
 };

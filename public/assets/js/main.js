@@ -76,6 +76,28 @@ $(document).ready(function () {
     // )    
   });
 
+  $("#loginForm").on("submit", function (event) {
+    event.preventDefault();
+
+    const loginData = {
+      username: $("#loginForm [name=username]").val().trim(),
+      password: $("#loginForm [name=password]").val().trim()
+    }
+
+    $.ajax("/login", {
+      method: "POST",
+      data: loginData,
+      success: function (data) {
+        localStorage.setItem("access_token", JSON.stringify(data.access_token));
+        location.href = "/service-menu";
+      },
+      error: function (err) {
+        alert(err.responseJSON);
+        $("#loginForm")[0].reset();
+      }
+    });
+  });
+
 });
 
 
