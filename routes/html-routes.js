@@ -17,5 +17,8 @@ module.exports = function (app) {
         res.render("login");
     });
 
+    app.get("/handyman-login", function (req, res) {
+        res.render("handyman-login");
+    });
 
 };
