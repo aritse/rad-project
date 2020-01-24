@@ -12,3 +12,57 @@ html, body {
 body {
     background-color: salmon;
 }
+
+#selectedService{
+    background-color: azure;
+    border: none
+}
+
+#addServiceForm {
+    padding: 5px;
+    text-align: left;
+    width: 200px;
+}
+
+#addServiceForm div {
+    padding: 5px;
+    margin: 8px;
+}
+
+#addServiceForm label {
+    font-weight: 800;
+}
+
+#addServiceForm input {
+    border: 1px solid lightskyblue;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+button {
+    padding: 2px;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+#addServiceSubmitBtn {
+    padding: 5px;
+    border-radius: 8px;
+    color: white;
+    background-color: lightgreen;
+    border: 1px solid green;
+}
+
+#servicesDropdown{
+    padding: 2px;
+    margin: 2px;
+}
+
+#serviceCalendar {
+    padding: 2px;
+    margin: 2px;
+}
+
+#calendarSubmit {
+    padding: 4px;
+}

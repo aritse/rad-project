@@ -23,14 +23,15 @@ app.use(session({
   cookie: { maxAge: 7200000 }
 }));
 
+// Routes
 require("./routes/html-routes")(app);
 require("./routes/customer-routes")(app);
 require("./routes/handyman-routes")(app);
 require("./routes/service-menu-routes")(app);
 require("./routes/service-request-routes")(app);
 
-db.sequelize.sync({force:true}).then(function() {
-  app.listen(PORT, function(err) {
+db.sequelize.sync({ force: false }).then(function () {
+  app.listen(PORT, function (err) {
     if (err) throw err;
     console.log("Server Listening on http://localhost:" + PORT);
   });
