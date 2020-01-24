@@ -1,4 +1,4 @@
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   const Customer = sequelize.define("Customer", {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
@@ -10,8 +10,8 @@ module.exports = function (sequelize, DataTypes) {
     phoneNumber: DataTypes.STRING
   });
 
-  Customer.associte = function (models) {
-    Customer.belongsTo(models.User, { onDelete: "CASCADE" });
+  Customer.associte = function(models) {
+    Customer.belongsTo(models.User, { foreignKey: { allowNull: false } });
     Customer.hasMany(models.ServiceRequest, { onDelete: "CASCADE" });
   };
 
