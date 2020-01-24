@@ -53,7 +53,7 @@ module.exports = function (app) {
      * @expects id to be on req.params (url parameter)
      */
     app.get("/api/customers/:id", (req, res) => {
-        db.Customer.update(req.body, { where: { id: req.params.id } })
+        db.Customer.findOne({ where: { id: req.params.id } })
             .then(function (dbCustomer) {
                 res.status(200).json(dbCustomer);
             });
