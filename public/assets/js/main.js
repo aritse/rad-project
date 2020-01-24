@@ -40,14 +40,39 @@ console.log("main.js");
     event.preventDefault();
     const jobDate = {date: $("#serviceCalendar").val(), serviceId: $("#servicesDropdown").val()};
     // $.ajax({
-    //   url: "",//goes to timeslot selection screen
-    //   type: POST,
-    //   post: jobDate        //uncomment this section after timeslot selection screen is ready for input.
+    //   url: "/api/request/availability",//get availability from db
+    //   type: "GET",
+    //   data: jobDate        //uncomment this section after timeslot selection screen is ready for input.
     // }).then(
     //   function (data){
     //     console.log("object sent");  
     //   }
     // )    
+  })
+  $("#timeSlotForm").on("click", "tbody", "tr", function(event){
+    $(this).addClass("highlight").siblings().removeClass("highlight");
+  })
+  $("#timeSubmit").on("click", function(event){
+    var rows = isLitRow();
+    var timeSlot = rows.attr("id")
+    $.ajax({
+        url:"/api/request/confirm",
+        type: "POST",
+        data: timeSlot
+      }).then(
+        function(data){
+          console.log("data time slot sent");  
+        }
+      )
+  })
+  var isLitRow = function(){
+    return $("table > tbody > tr.highlight");
+  }
+    
+    // const timeSlot = $("#timeSlotForm").val();
+    
+  
+  
   })
 
  });
