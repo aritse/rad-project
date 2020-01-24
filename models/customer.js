@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
     phoneNumber: DataTypes.STRING
   });
 
-  Customer.associte = function(models) {
+  Customer.associate = function(models) {
     Customer.belongsTo(models.User, { foreignKey: { allowNull: false } });
     Customer.hasMany(models.ServiceRequest, { onDelete: "CASCADE" });
   };
