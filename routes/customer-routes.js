@@ -74,7 +74,6 @@ module.exports = function (app) {
 
     // post for register, JWT Auth
     app.post("/register", function (req, res) {
-        console.log("post register");
         const username = req.body.username;
         const password = bcrypt.hashSync(req.body.password);
         const isAdmin = req.body.isAdmin || 0;
