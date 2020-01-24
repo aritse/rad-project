@@ -9,6 +9,40 @@ html, body {
     width: 100%;
 }
 
-body {
-    background-color: salmon;
+.content{
+     background: white; 
+     width: 60%;
+     margin-top: 200px
+     ;
+    /* background-image: url("/assets/images/home_interior.jpg");
+    background-size: 1000px; */
+    /* width:300px;
+    height:800px; */
+}
+
+.content-container{
+    background-image: url("/assets/images/home_interior.jpg");
+    background-size: 1000px;
+    /* width: 300px; */
+    height: 1080px;
+    color: black;
+    width:100%;
+    text-align: center;
+}
+
+.welcome-header{
+    background-image: url("/assets/images/home_interior.jpg");
+    background-size: 1000px;
+    width: 300px;
+    height: 500px;
+    color: white;
+    width:100%;
+    text-align: center;
+ 
+}
+#welcome-text{
+    padding-top: 250px;
+}
+#welcome-signup a{
+    color: black;
 }

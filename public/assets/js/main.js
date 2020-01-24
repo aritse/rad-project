@@ -30,7 +30,7 @@ console.log("main.js");
       data: userData
     }).then(
       function (data) {
-        // console.log(data);
+         console.log(data);
         // Reload the page to get the updated list
         location.href="/service-menu";
       }
