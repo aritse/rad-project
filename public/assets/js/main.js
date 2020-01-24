@@ -28,16 +28,16 @@ $(document).ready(function () {
 
     // build the userData object
     const userData = {
-      username: "user1", //$("#username").val().trim(),
-      password: "pass",//$("#password").val().trim(),
-      first_name: "Us",//$("#first_name").val().trim(),
-      last_name: "Ser", // $("#last_name").val().trim(),
-      address: "123 st",//$("#address").val().trim(),
-      city: "Seatall", // $("#city").val().trim(),
-      state: "WA", //$("#state").val().trim(),
-      zipcode: "123123", // $("#zipcode").val().trim(),
-      phoneNumber: "123-123-1234", // $("#phoneNumber").val().trim(),
-      email: "gg@email.com" // $("#email").val().trim(),
+      username: $("#username").val().trim(),
+      password: $("#password").val().trim(),
+      first_name: $("#first_name").val().trim(),
+      last_name: $("#last_name").val().trim(),
+      address: $("#address").val().trim(),
+      city: $("#city").val().trim(),
+      state: $("#state").val().trim(),
+      zipcode: $("#zipcode").val().trim(),
+      phoneNumber: $("#phoneNumber").val().trim(),
+      email: $("#email").val().trim(),
     };
 
     //Send the POST request.
