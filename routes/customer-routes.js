@@ -95,7 +95,7 @@ module.exports = function (app) {
         const isAdmin = req.body.isAdmin || 0;
 
         db.User.create({ username, password, isAdmin }).then(function (dbUser) {
-            const user = { id: user.id, username: user.username };
+            const user = { id: dbUser.id, username: dbUser.username };
             const customer = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,

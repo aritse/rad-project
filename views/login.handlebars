@@ -1,14 +1,20 @@
-<h1 id = "welcomeMessage">WELCOME TO HANDYMAN RAD</h1>
+<h1 id="welcomeMessage">WELCOME TO HANDYMAN RAD</h1>
 <h3>Rapid Automated Dispatch(RAD) For Home Repairs</h3>
-<div class = "container">
-    <div class = "wrapper">
-       
-<form action="/login"method="POST">
-    <input type="text" name = "name" placeholder="Username">
-    <input type="password" name = "password" placeholder="password" >
-    <input type="submit" id ="submit-login-btn" value="Click Here to Login!">
-</form>
+<div class="container">
+    <div class="login-wrapper">
 
-<a href="/">First time? sign up here!</a>
+        <form role="form" id="loginForm">
+            <div>
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Username">
+            </div>
+            <div>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="password" autocomplete="off">
+            </div>
+            <input type="submit" id="submit-login-btn" value="Click Here to Login!">
+        </form>
+
+        <a href="/register">First time? sign up here!</a>
     </div>
 </div>
