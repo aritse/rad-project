@@ -12,3 +12,8 @@ html, body {
 body {
     background-color: salmon;
 }
+
+#selectedService{
+    background-color: azure;
+    border: none
+}

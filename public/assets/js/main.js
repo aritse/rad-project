@@ -36,6 +36,20 @@ console.log("main.js");
       }
     );
   });
+  $("#calendarSubmit").on("click", function(event){
+    event.preventDefault();
+    const jobDate = {date: $("#serviceCalendar").val(), serviceId: $("#servicesDropdown").val()};
+    // $.ajax({
+    //   url: "",//goes to timeslot selection screen
+    //   type: POST,
+    //   post: jobDate        //uncomment this section after timeslot selection screen is ready for input.
+    // }).then(
+    //   function (data){
+    //     console.log("object sent");  
+    //   }
+    // )    
+  })
+
  });
 
 
