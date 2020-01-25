@@ -2,8 +2,6 @@ var db = require("../models");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Routes
-// =============================================================
 module.exports = function (app) {
 
     // update customer info view
@@ -13,7 +11,6 @@ module.exports = function (app) {
         //     req.session.error = "No session, please login"
         //     return res.redirect("/");
         // } else {
-        req.session.user = { id: 1, username: "Han2" }
         db.Customer.findOne({
             where: {
                 UserId: req.session.user.id
@@ -80,34 +77,60 @@ module.exports = function (app) {
      * @returns Auth token, User and Customer info
      */
     app.post("/login", function (req, res) {
-        const username = req.body.username;
-        const password = req.body.password;
+        /* Get user&password from the Auth header */
+        // we expect the header to be 'Basic btoa(username:password)'
+        // authHedr is the base64 encoded string "username:password"
+        let authHedr = req.get('Authorization').split(" ")[1];
+        // we convert the base64 buffer to a string
+        authHedr = Buffer.from(authHedr, 'Base64').toString();
+        // we extract the username and password by spliting on :
+        const username = authHedr.split(":")[0];
+        const password = authHedr.split(":")[1];
 
+        // find user by username
         db.User.findOne({
             where: {
                 username
             }
         }).then(function (dbUser) {
+            // if no user, return 404
             if (!dbUser) return res.status(404).json("No user found");
+
+            // compare password with bcrypt
             const result = bcrypt.compareSync(password, dbUser.password);
+            // if password not correct, return 401
             if (!result) return res.status(401).json("Password incorrect");
 
+            // look for customer with Userid
             db.Customer.findOne({
                 where: {
                     UserId: dbUser.id
                 }
             }).then(customer => {
+                // customer not found with that userid, return 404
                 if (!customer) return res.status(404).json("No User Found");
+
+                /* Successful login */
+                // create a user object to store in the session
                 const user = { id: dbUser.id, username: dbUser.username };
                 const expiresIn = 24 * 60 * 60;
+
+                // store session user
                 req.session.user = user;
                 req.session.error = "";
+
+                // JWT token
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
+
+                // return status 200, and user info and access token
                 res.status(200).json({ user, customer, "access_token": accessToken, "expires_in": expiresIn });
             })
         }).catch(err => {
+            // remove session user
             req.session.user = false;
             req.session.error = "Failed creating customer";
+
+            // return error message
             if (err.parent && err.parent.sqlMessage) {
                 res.status(500).json(err.parent.sqlMessage);
             } else {
@@ -123,10 +146,21 @@ module.exports = function (app) {
      * @returns Auth token, User and Customer info
      */
     app.post("/register", function (req, res) {
-        const username = req.body.username;
-        const password = bcrypt.hashSync(req.body.password);
+        /* Get user&password from the Auth header */
+        // we expect the header to be 'Basic btoa(username:password)'
+        // authHedr is the base64 encoded string "username:password"
+        let authHedr = req.get('Authorization').split(" ")[1];
+        // we convert the base64 buffer to a string
+        authHedr = Buffer.from(authHedr, 'Base64').toString();
+        // we extract the username and password by spliting on :
+        const username = authHedr.split(":")[0];
+        let password = authHedr.split(":")[1];
+
+        // encrypt the password
+        password = bcrypt.hashSync(password);
         const isAdmin = req.body.isAdmin || 0;
 
+        // Create user
         db.User.create({ username, password, isAdmin }).then(function (dbUser) {
             const user = { id: dbUser.id, username: dbUser.username };
             const customer = {
@@ -141,15 +175,20 @@ module.exports = function (app) {
                 UserId: dbUser.id
             }
 
+            // Create customer
             db.Customer.create(customer).then(function (dbCustomer) {
+                // create session user
                 req.session.user = user;
                 req.session.error = "";
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, "customerInfo": dbCustomer, "access_token": accessToken, "expires_in": expiresIn });
             }).catch(err => {
+                // remove session user
                 req.session.user = false;
                 req.session.error = "Failed creating customer";
+
+                // return error message
                 if (err.parent && err.parent.sqlMessage) {
                     res.status(500).json(err.parent.sqlMessage);
                 } else {
@@ -157,8 +196,11 @@ module.exports = function (app) {
                 }
             })
         }).catch(err => {
+            // remove session user
             req.session.user = false;
             req.session.error = "Failed creating customer";
+
+            // return error message
             if (err.parent && err.parent.sqlMessage) {
                 res.status(500).json(err.parent.sqlMessage);
             } else {
