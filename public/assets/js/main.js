@@ -47,6 +47,13 @@ $(document).ready(function () {
     }
   });
 
+  /**
+   * make_base_auth
+   * @description Takes username password
+   * returns "Basic " + base64 encoded "username:password"
+   * @param {string} u - username 
+   * @param {string} p - password
+   */
   function make_base_auth(u, p) {
     return "Basic " + btoa(u + ":" + p);
   }
@@ -56,16 +63,17 @@ $(document).ready(function () {
    */
   $("#reg-submit-btn").on("click", function (event) {
     event.preventDefault();
+    // grab username password for authorization header
     let uname = $("#username").val().trim();
     let pwrd = $("#password").val().trim();
     // build the userData object
     const userData = {
-      firstName: $("#first_name").val().trim(),
-      lastName: $("#last_name").val().trim(),
+      firstName: $("#firstName").val().trim(),
+      lastName: $("#lastName").val().trim(),
       address: $("#address").val().trim(),
       city: $("#city").val().trim(),
       state: $("#state").val().trim(),
-      zipCode: $("#zipcode").val().trim(),
+      zipCode: $("#zipCode").val().trim(),
       phoneNumber: $("#phoneNumber").val().trim(),
       email: $("#email").val().trim(),
     };
@@ -95,17 +103,17 @@ $(document).ready(function () {
    */
   $("#handyreg-submit-btn").on("click", function (event) {
     event.preventDefault();
-
+    // get username and password for the Authorization header
+    let uname = $("#username").val().trim();
+    let pwrd = $("#password").val().trim();
     // build the userData object
     const userData = {
-      username: $("#username").val().trim(),
-      password: $("#password").val().trim(),
-      firstName: $("#first_name").val().trim(),
-      lastName: $("#last_name").val().trim(),
+      firstName: $("#firstName").val().trim(),
+      lastName: $("#lastName").val().trim(),
       address: $("#address").val().trim(),
       city: $("#city").val().trim(),
       state: $("#state").val().trim(),
-      zipCode: $("#zipcode").val().trim(),
+      zipCode: $("#zipCode").val().trim(),
       phoneNumber: $("#phoneNumber").val().trim(),
       email: $("#email").val().trim(),
     };
@@ -114,7 +122,11 @@ $(document).ready(function () {
     $.ajax({
       url: "/handyman-register",
       type: "POST",
-      data: userData
+      data: userData,
+      beforeSend: function (xhr) {
+        // create a Basic authorization header
+        xhr.setRequestHeader('Authorization', make_base_auth(uname, pwrd));
+      }
     }).then(
       function (data) {
 

@@ -6,32 +6,32 @@ module.exports = function (app) {
 
     // update customer info view
     app.get("/customer-info", function (req, res) {
-        // if (!req.session.user) {
-        //     req.session.user = false;
-        //     req.session.error = "No session, please login"
-        //     return res.redirect("/");
-        // } else {
-        db.Customer.findOne({
-            where: {
-                UserId: req.session.user.id
-            },
-            include: [db.User]
-        }).then(dbCustomer => {
-            const customer = {
-                id: dbCustomer.id,
-                firstName: dbCustomer.firstName,
-                lastName: dbCustomer.lastName,
-                streetAddress: dbCustomer.streetAddress,
-                city: dbCustomer.city,
-                state: dbCustomer.state,
-                zipCode: dbCustomer.zipCode,
-                phoneNumber: dbCustomer.phoneNumber,
-                email: dbCustomer.email,
-                userId: dbCustomer.userId
-            }
-            res.render("customer-info", customer);
-        });
-        // }
+        if (!req.session.user) {
+            req.session.user = false;
+            req.session.error = "No session, please login"
+            return res.redirect("/");
+        } else {
+            db.Customer.findOne({
+                where: {
+                    UserId: req.session.user.id
+                },
+                include: [db.User]
+            }).then(dbCustomer => {
+                const customer = {
+                    id: dbCustomer.id,
+                    firstName: dbCustomer.firstName,
+                    lastName: dbCustomer.lastName,
+                    streetAddress: dbCustomer.streetAddress,
+                    city: dbCustomer.city,
+                    state: dbCustomer.state,
+                    zipCode: dbCustomer.zipCode,
+                    phoneNumber: dbCustomer.phoneNumber,
+                    email: dbCustomer.email,
+                    userId: dbCustomer.userId
+                }
+                res.render("customer-info", customer);
+            });
+        }
     });
 
     /**
