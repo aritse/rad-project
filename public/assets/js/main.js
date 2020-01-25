@@ -193,6 +193,7 @@ $(document).ready(function () {
     });
   });
 
+
   $("#handyloginForm").on("submit", function (event) {
     event.preventDefault();
 
@@ -214,6 +215,7 @@ $(document).ready(function () {
       }
     });
   });
+
 
 });
 
