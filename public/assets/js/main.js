@@ -1,6 +1,33 @@
 // Make sure we wait to attach our handlers until the DOM is fully loaded.
 $(document).ready(function () {
+  $(".updateCustomerForm").on("submit", function (event) {
+    event.preventDefault();
+    // build the userData object
+    const userData = {
+      firstName: $("#firstName").val().trim(),
+      lastName: $("#lastName").val().trim(),
+      streetAddress: $("#streetAddress").val().trim(),
+      city: $("#city").val().trim(),
+      state: $("#state").val().trim(),
+      zipCode: $("#zipCode").val().trim(),
+      phoneNumber: $("#phoneNumber").val().trim(),
+      email: $("#email").val().trim()
+    };
 
+    const url = "/api/customers/" + $("#id").val().trim();
+
+    //Send the POST request.
+    $.ajax({
+      url: url,
+      type: "PUT",
+      data: userData
+    }).then(
+      function (data) {
+        // Reload the page to get the updated list
+        location.href = "/customer-info";
+      }
+    );
+  });
   // init New Service Form as hidden
   $("#addServiceForm").hide();
   let addingService = false;
@@ -35,7 +62,7 @@ $(document).ready(function () {
       address: $("#address").val().trim(),
       city: $("#city").val().trim(),
       state: $("#state").val().trim(),
-      zipcode: $("#zipcode").val().trim(),
+      zipCode: $("#zipcode").val().trim(),
       phoneNumber: $("#phoneNumber").val().trim(),
       email: $("#email").val().trim(),
     };
@@ -72,30 +99,30 @@ $(document).ready(function () {
       type: "GET",
       data: jobDate        //uncomment this section after timeslot selection screen is ready for input.
     }).then(
-      function (data){
-        console.log("object sent");  
+      function (data) {
+        console.log("object sent");
       }
-    )    
+    )
   })
-  $("#timeSlotForm").on("click", "tbody", "tr", function(event){
+  $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this).addClass("highlight").siblings().removeClass("highlight");
   })
 
-  $("#timeSubmit").on("click", function(event){
+  $("#timeSubmit").on("click", function (event) {
     var rows = isLitRow();
     var timeSlot = rows.attr("id")
     $.ajax({
-        url:"/api/request/confirm",
-        type: "POST",
-        data: timeSlot
-      }).then(
-        function(data){
-          console.log("data time slot sent");  
-        }
-      )
+      url: "/api/request/confirm",
+      type: "POST",
+      data: timeSlot
+    }).then(
+      function (data) {
+        console.log("data time slot sent");
+      }
+    )
   })
 
-  var isLitRow = function(){
+  var isLitRow = function () {
     return $("table > tbody > tr.highlight");
   }
 

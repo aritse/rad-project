@@ -3,8 +3,9 @@
     margin: 0;
     padding: 0;
 }
-.container-index{
-    width:100%;
+
+.container-index {
+    width: 100%;
 }
 
 html, body {
@@ -12,50 +13,81 @@ html, body {
     width: 100%;
 }
 
-.content{
-     background: white; 
-     width: 60%;
-     margin-top: 200px;
+.content {
+    background: white;
+    width: 60%;
+    margin-top: 200px;
 }
 
 .content-container{
+    position: absolute;
     background-image: url("/assets/images/home_interior.jpg");
-    background-size: 1000px;
-    /* width: 300px; */
-    height: 1080px;
-    color: black;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 300px;
+    /* height: 600px; */
+    color: white;
     width:100%;
     text-align: center;
+    /* height: 1080px; */
+    color: black;
+    
+    /* display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; */
+    /* text-align: center; */
 }
 
-.main-row{
-    margin-left: 50px;
+.content-wrapper{
+    background: white;
+    width: 80%;
+    min-height:80vh;
+    display:block;
+    width: fit-content; 
+    /* height: 600px; */
+    padding: 0px 15px 0px 15px;
+    position: relative;
+     left: 25%;
+     top: 50%;
+     /* -moz-transform: translate(-50%, -50%);
+     -webkit-transform: translate(-50%, -50%);
+     -ms-transform: translate(-50%, -50%);
+     -o-transform: translate(-50%, -50%);
+     transform: translate(-50%, -50%); */
 }
+#welcome-signup .row{
+    margin-left: 95px;
+    
 
-.content-container i{
+
+.content-container i {
     font-size: 25px;
 }
 
-.welcome-header{
+.welcome-header {
     background-image: url("/assets/images/home_interior.jpg");
     background-size: 1000px;
     width: 300px;
     height: 500px;
     color: white;
-    width:100%;
+    width: 100%;
     text-align: center;
- 
 }
-#welcome-text{
+
+#welcome-text {
     padding-top: 250px;
 }
-#welcome-signup a{
+
+#welcome-signup a {
     color: black;
 }
 
 #selectedService {
     background-color: azure;
-    border: none
+    border: none;
 }
 
 #addServiceForm {
@@ -118,11 +150,14 @@ button {
     box-shadow: 2px 2px 4px white;
 }
 
-
-
 #welcomeMessage {
     margin: 15px 0;
-    color: red;
-    text-shadow: 2px 2px white;
+    color:white;
+    text-shadow: 2px 2px #899fa6;
+
+}
+
+.highlight{
+    background: azure;
 
 }
