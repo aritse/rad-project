@@ -58,9 +58,7 @@ module.exports = function (app) {
     app.post("/handyman-login", function (req, res) {
         const username = req.body.username;
         const password = req.body.password;
-        console.log("handyman login");
-        console.log(username);
-        console.log(password);
+        
 
         db.User.findOne({
             where: {
@@ -72,7 +70,7 @@ module.exports = function (app) {
                 req.session.error = "No User Found";
                 return res.status(404).json("No user found");
             }
-            console.log(dbUser);
+            // console.log(dbUser);
             
             const result = bcrypt.compareSync(password, dbUser.password);
             if (!result) return res.status(401).json("Username or Password incorrect");
@@ -87,7 +85,7 @@ module.exports = function (app) {
                     req.session.error = "No User Found";
                     return res.status(404).json("No User Found");
                 }
-                console.log("HandyMan", handyman);
+                // console.log("HandyMan", handyman);
                 
                 const user = { id: handyman.id, username: handyman.username };
                 req.session.user = user;
