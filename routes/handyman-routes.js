@@ -58,10 +58,13 @@ module.exports = function (app) {
     app.post("/handyman-login", function (req, res) {
         const username = req.body.username;
         const password = req.body.password;
+        console.log("handyman login");
+        console.log(username);
+        console.log(password);
 
         db.User.findOne({
             where: {
-                username
+                username:username
             }
         }).then(function (dbUser) {
             if (!dbUser) {
@@ -69,6 +72,8 @@ module.exports = function (app) {
                 req.session.error = "No User Found";
                 return res.status(404).json("No user found");
             }
+            console.log(dbUser);
+            
             const result = bcrypt.compareSync(password, dbUser.password);
             if (!result) return res.status(401).json("Username or Password incorrect");
 
@@ -82,13 +87,15 @@ module.exports = function (app) {
                     req.session.error = "No User Found";
                     return res.status(404).json("No User Found");
                 }
-                const user = { id: user.id, username: user.username };
+                console.log("HandyMan", handyman);
+                
+                const user = { id: handyman.id, username: handyman.username };
                 req.session.user = user;
                 req.session.error = "";
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
 
-                res.status(200).json({ user, handyman, "access_token": accessToken, "expires_in": expiresIn });
+                res.status(200).json({ user: user, handyman, "access_token": accessToken, "expires_in": expiresIn });
             })
         }).catch(err => {
             req.session.user = false;
