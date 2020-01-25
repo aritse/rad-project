@@ -56,19 +56,32 @@ module.exports = function (app) {
 
     // post for handyman login, JWT Auth
     app.post("/handyman-login", function (req, res) {
-        const username = req.body.username;
-        const password = req.body.password;
+        /* Get user&password from the Auth header */
+        // we expect the header to be 'Basic btoa(username:password)'
+        // authHedr is the base64 encoded string "username:password"
+        let authHedr = req.get('Authorization').split(" ")[1];
+        // we convert the base64 buffer to a string
+        authHedr = Buffer.from(authHedr, 'Base64').toString();
+        // we extract the username and password by spliting on :
+        const username = authHedr.split(":")[0];
+        const password = authHedr.split(":")[1];
 
         db.User.findOne({
-            where: {
-                username
-            }
+            /**
+             * We use ES6 Object Deconstruction here on "username".
+             * Because the variable name "username" is the same as
+             * the key in the table "username", Javascript knows we
+             * mean {"username":username}.
+             */
+            where: { username }
         }).then(function (dbUser) {
             if (!dbUser) {
                 req.session.user = false;
                 req.session.error = "No User Found";
                 return res.status(404).json("No user found");
             }
+            // console.log(dbUser);
+
             const result = bcrypt.compareSync(password, dbUser.password);
             if (!result) return res.status(401).json("Username or Password incorrect");
 
@@ -82,13 +95,15 @@ module.exports = function (app) {
                     req.session.error = "No User Found";
                     return res.status(404).json("No User Found");
                 }
-                const user = { id: user.id, username: user.username };
+                // console.log("HandyMan", handyman);
+
+                const user = { id: handyman.id, username: handyman.username };
                 req.session.user = user;
                 req.session.error = "";
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
 
-                res.status(200).json({ user, handyman, "access_token": accessToken, "expires_in": expiresIn });
+                res.status(200).json({ user: user, handyman, "access_token": accessToken, "expires_in": expiresIn });
             })
         }).catch(err => {
             req.session.user = false;
@@ -107,8 +122,16 @@ module.exports = function (app) {
      * @accepts User and Handyman information over req.body
      */
     app.post("/handyman-register", function (req, res) {
-        const username = req.body.username;
-        const password = bcrypt.hashSync(req.body.password);
+        /* Get user&password from the Auth header */
+        // we expect the header to be 'Basic btoa(username:password)'
+        // authHedr is the base64 encoded string "username:password"
+        let authHedr = req.get('Authorization').split(" ")[1];
+        // we convert the base64 buffer to a string
+        authHedr = Buffer.from(authHedr, 'Base64').toString();
+        // we extract the username and password by spliting on :
+        const username = authHedr.split(":")[0];
+        let password = authHedr.split(":")[1];
+        password = bcrypt.hashSync(password);
         const isAdmin = req.body.isAdmin || 1;
 
         db.User.create({ username, password, isAdmin }).then(function (dbUser) {

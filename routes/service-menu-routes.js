@@ -18,8 +18,11 @@ module.exports = function (app) {
     })
       .catch(err => console.log(err));
   })
+
+  
   app.get("/api/menu", function (req, res) {
     db.ServiceMenu.findAll({ raw: true }).then(function (dbServiceMenu) {
+      console.log(dbServiceMenu)
       res.render("service-menu", { servicemenus: dbServiceMenu });
     }).catch(err => console.log(err));
   });
