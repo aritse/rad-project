@@ -22,5 +22,9 @@ module.exports = function (app) {
         res.render("handyman-login");
     });
 
+    app.get("/handyman-register", function (req, res) {
+        res.render("handyman-register");
+    });
+
 
 };
