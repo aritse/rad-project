@@ -164,6 +164,8 @@ $(document).ready(function () {
               row.append(cell);
           };
       };
+    });
+  })
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // not sure I've done this right
 
@@ -248,8 +250,5 @@ $(document).ready(function () {
 
 
 });
-
-
-
 
 
