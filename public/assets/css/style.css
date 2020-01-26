@@ -191,3 +191,7 @@ button {
 .highlight {
     background: azure;
 }
+
+#timeSlotContainer {
+    display: none;
+}

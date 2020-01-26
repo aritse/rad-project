@@ -153,12 +153,21 @@ $(document).ready(function () {
     $.ajax({
       url: "/api/request/availability",//get availability from db
       type: "GET",
-      data: jobDate        //uncomment this section after timeslot selection screen is ready for input.
-    }).then(
-      function (data) {
-        console.log("object sent");
-      }
-    )
+      data: jobDate        //send this input to table.
+    }).then(function(jobDate){
+      localStorage.setItem("avail", jobDate)
+      location.reload();
+      localStorage.getItem("avail");
+      $("#timeSlotContainer").show();
+      // The intent of this function is to have the table only show once data has been retrieved.
+    })
+    
+    
+    // .then(
+    //   function (data) {
+    //     console.log("object sent");
+    //   }
+    // )
   })
   $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this).addClass("highlight").siblings().removeClass("highlight");
