@@ -7,6 +7,7 @@ module.exports = function(app) {
     });
   });
 
+  // facing customer , returns customers's service reqest
   app.get("/api/request", function(req, res) {
     db.ServiceRequest.findAll().then(function(dbServiceRequest) {
       res.json(dbServiceRequest);
@@ -21,6 +22,20 @@ module.exports = function(app) {
       res.json(dbServiceRequest);
     });
   });
+
+
+  // facing handyman, should return all SRs assigned to handyman
+  app.get("/api/request/:handymanId", function(req, res) {
+    db.ServiceRequest.findAll({
+      where: {
+        CustomerId: req.params.id
+      }
+    }).then(function(dbServiceRequest) {
+      res.json(dbServiceRequest);
+    });
+  });
+
+
   app.put("/api/request/:id", function(req, res) {
     db.ServiceRequest.update(req.body, {
       where: { id: req.params.id }

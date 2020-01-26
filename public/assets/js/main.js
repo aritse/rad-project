@@ -84,6 +84,45 @@ $(document).ready(function () {
     );
   });
 
+
+  /**
+   * On Handyman Register Submit, Register new handyman
+   */
+  $("#handyreg-submit-btn").on("click", function (event) {
+    event.preventDefault();
+
+    // build the userData object
+    const userData = {
+      username: $("#username").val().trim(),
+      password: $("#password").val().trim(),
+      firstName: $("#first_name").val().trim(),
+      lastName: $("#last_name").val().trim(),
+      address: $("#address").val().trim(),
+      city: $("#city").val().trim(),
+      state: $("#state").val().trim(),
+      zipCode: $("#zipcode").val().trim(),
+      phoneNumber: $("#phoneNumber").val().trim(),
+      email: $("#email").val().trim(),
+    };
+
+    //Send the POST request.
+    $.ajax({
+      url: "/handyman-register",
+      type: "POST",
+      data: userData
+    }).then(
+      function (data) {
+
+        // store user in local storage
+        localStorage.setItem("user", JSON.stringify(data));
+
+        // Reload the page to get the updated list
+        location.href = "/service-menu";
+      }
+    );
+  });
+
+
   /**
    * User has chosen a date and a service,
    * move on to Create Service Request,
@@ -126,6 +165,12 @@ $(document).ready(function () {
     return $("table > tbody > tr.highlight");
   }
 
+  /**
+   * User has entered user name and password 
+   * into /login screen
+   * on submit data will be posted to /login
+   *  */
+
   $("#loginForm").on("submit", function (event) {
     event.preventDefault();
 
@@ -148,7 +193,33 @@ $(document).ready(function () {
     });
   });
 
-    $('select').formSelect();
+
+  $("#handyloginForm").on("submit", function (event) {
+    event.preventDefault();
+
+    const loginData = {
+      username: $("#handyloginForm [name=username]").val().trim(),
+      password: $("#handyloginForm [name=password]").val().trim()
+    }
+
+    $.ajax("/handyman-login", {
+      method: "POST",
+      data: loginData,
+      success: function (data) {
+        localStorage.setItem("access_token", JSON.stringify(data.access_token));
+        location.href = "/service-menu";
+      },
+      error: function (err) {
+        alert(err.responseJSON);
+        $("#handyloginForm")[0].reset();
+      }
+    });
+  });
+
+
 });
+
+
+
 
 
