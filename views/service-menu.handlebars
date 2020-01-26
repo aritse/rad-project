@@ -25,13 +25,19 @@
             <th>Start time available</th>
             <th>Estimated end time</th>
             <th>Number of workers required</th>
+{{!-- The code below had been on its own page (service-selection)
+handlebars won't wait for this information. This need to be handled in the js file.
             {{#each timeSlots}}
             <tr id = {{timeStart}}>
             <td> {{timeStart}} </td>
             <td> {{timeEnd}} </td>
             <td> {{numberOfHandyman}} </td>
             </tr>
+
+            {{/each}} --}}
+        </table>
             {{/each}}
+
             <input type="submit" value="Select this time slot" id = "timeSubmit">
         </table>
     </div>

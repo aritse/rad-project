@@ -155,20 +155,20 @@ $(document).ready(function () {
       type: "GET",
       data: jobDate        //send this input to table.
     }).then(function(jobDate){
-      localStorage.setItem("avail", jobDate)
-      location.reload();
-      localStorage.getItem("avail");
-      $("#timeSlotContainer").show();
-      // The intent of this function is to have the table only show once data has been retrieved.
-    })
-    
-    
-    // .then(
-    //   function (data) {
-    //     console.log("object sent");
-    //   }
-    // )
-  })
+      var table = $("#timeSlotForm")
+      for(var i = 1; i < jobDate.length; i++){
+          var row = table[i];
+          for(var j = 0; j < 3; j++){
+              var cell = $("<td> </td>")
+              cell.html(jobdate[i][j]);
+              row.append(cell);
+          };
+      };
+    });
+  });
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // not sure I've done this right
+
   $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this).addClass("highlight").siblings().removeClass("highlight");
   })
@@ -242,8 +242,20 @@ $(document).ready(function () {
     });
   });
  
+  ("#updateStatus").on("click", function(event){
+    event.preventDefault();
+    const newStatus = $("#updateServiceRequest").val();
+    $.ajax({
+      url: "/api/update/service",
+      type: "PUT",
+      data: newStatus
+    }).then(function(data){
+      console.log("status changed");      
+    });
+  });
+
   
-  $("select").formSelect();
+  $('select').material_select();
   // ^^^^^^^^^^^^^^^^^^^ this makes the dropdown work.
 
 
@@ -252,8 +264,5 @@ $(document).ready(function () {
   $('select').formSelect();
 
 });
-
-
-
 
 

@@ -34,4 +34,8 @@ module.exports = function (app) {
         res.render("confirm");
     });
 
+    app.get("/update-service", function(req, res){
+        res.render("assignments")
+    });
+
 };
