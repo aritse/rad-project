@@ -155,20 +155,33 @@ $(document).ready(function () {
       type: "GET",
       data: jobDate        //send this input to table.
     }).then(function(jobDate){
-      localStorage.setItem("avail", jobDate)
-      location.reload();
-      localStorage.getItem("avail");
-      $("#timeSlotContainer").show();
-      // The intent of this function is to have the table only show once data has been retrieved.
-    })
-    
-    
-    // .then(
-    //   function (data) {
-    //     console.log("object sent");
-    //   }
-    // )
-  })
+      var container = $('<div class "container" id = "timeSlotContainer"></div>');
+      $("body").append(container);
+      var wrapper = $('<div class = "wrapper"></div>');
+      $(container).append(wrapper);
+      var table = $('<table id = "timeSlotForm"></table>');
+      $(wrapper).append(table);
+      var head = $(table[0].insertRow(-1))
+      var hOne = $('<th></th>');
+      hOne.html("Start time available");
+      var hTwo = $('<th></th>');
+      hTwo.html("Estimated end time");
+      var hThree = $('<th></th>');
+      hThree.html("Number of workers required");
+      head.append(hOne);
+      head.append(hTwo);
+      head.append(hThree);
+      for(var i = 1; i < jobDate.length; i++){
+          var row = table[i];
+          for(var j = 0; j < 3; j++){
+              var cell = $("<td> </td>")
+              cell.html(jobdate[i][j]);
+              row.append(cell);
+          };
+      };
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        // not sure I've done this right
+
   $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this).addClass("highlight").siblings().removeClass("highlight");
   })
