@@ -26,5 +26,12 @@ module.exports = function (app) {
         res.render("handyman-register");
     });
 
+    app.get("/select-slot", function (req, res) {   
+        res.render("service-selection");
+    });
+
+    app.get("/confirm", function (req, res) {
+        res.render("confirm");
+    });
 
 };
