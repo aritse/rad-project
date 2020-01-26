@@ -214,7 +214,7 @@ $(document).ready(function () {
       },
       error: function (err) {
         alert(err.responseJSON);
-        $("#loginForm")[0].reset();
+       $("#loginForm")[0].reset();
       }
     });
   });
@@ -248,6 +248,8 @@ $(document).ready(function () {
 
 
 
+  //for the service selection page Materialize will not show dropdowns by default
+  $('select').formSelect();
 
 });
 
