@@ -3,12 +3,12 @@
 <div class = "container">
     <div class = "wrapper">
         {{!-- get data in from database from servicerequests table as 'serviceRequests'--}}
-        <select name="updateServiceRequest" id="updateServiceRequest">
+        <select name="updateServiceRequest" id="updateServiceRequest" style = "display: block">
             <option value={{ServiceMenuId}}>Change status to "scheduled"</option>
             <option value={{ServiceMenuId}}>Change status to "in process"</option>
             <option value={{ServiceMenuId}}>Change status to "complete"</option>
         </select>
-        <input type="submit" value="Update status">
+        <input type="submit" value="Update status" id = "updatestatus">
 
 
     </div>

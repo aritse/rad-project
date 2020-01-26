@@ -165,7 +165,7 @@ $(document).ready(function () {
           };
       };
     });
-  })
+  });
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // not sure I've done this right
 
@@ -242,8 +242,20 @@ $(document).ready(function () {
     });
   });
  
+  ("#updateStatus").on("click", function(event){
+    event.preventDefault();
+    const newStatus = $("#updateServiceRequest").val();
+    $.ajax({
+      url: "/api/update/service",
+      type: "PUT",
+      data: newStatus
+    }).then(function(data){
+      console.log("status changed");      
+    });
+  });
+
   
-  $("select").formSelect();
+  $('select').material_select();
   // ^^^^^^^^^^^^^^^^^^^ this makes the dropdown work.
 
 
