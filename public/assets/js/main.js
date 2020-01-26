@@ -215,8 +215,9 @@ $(document).ready(function () {
       }
     });
   });
-
-
+  
+  $("select").formSelect();
+  // ^^^^^^^^^^^^^^^^^^^ this makes the dropdown work.
 });
 
 
