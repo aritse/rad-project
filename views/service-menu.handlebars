@@ -1,24 +1,41 @@
 {{> header/header}}
 
-<div class = "container">
-    <div class = "wrapper">
-        <select name="Services" id="servicesDropdown">
-            <option value="none">Select the service you need</option>
-            {{#each servicemenus}}
-            <option value={{id}}>{{title}} will take {{manHour}} hours</option>
+<div class="content-container center-align">
+
+    <div class="content-wrapper-svc">
+        <h3>Customer Schedule A Service</h3>
+        <div class="svc-dropwrapper">
+            <select name="Services" id="servicesDropdown">
+                <option value="none">Select the service you need</option>
+                {{#each servicemenus}}
+                <option value={{id}}>{{title}} will take {{manHour}} hours</option>
+                {{/each}}
+            </select>
+        </div>
+
+
+        {{!-- <div class="container"> --}}
+        <div class="cal-wrapper">
+            <form>
+                <input type="date" min="2020-01" id="serviceCalendar">
+                <input type="submit" value="Select a date" id="calendarSubmit">
+            </form>
+        </div>
+        <table id = "timeSlotForm">
+            <th>Start time available</th>
+            <th>Estimated end time</th>
+            <th>Number of workers required</th>
+            {{#each timeSlots}}
+            <tr id = {{timeStart}}>
+            <td> {{timeStart}} </td>
+            <td> {{timeEnd}} </td>
+            <td> {{numberOfHandyman}} </td>
+            </tr>
             {{/each}}
-        </select>
-    </div>
-</div>
-</div>
-<div class="container">
-    <div class="wrapper">
-        <form>
-            <input type="date" min="2020-01" id="serviceCalendar">
-            <input type="submit" value="Select a date" id="calendarSubmit">
-        </form>
+            <input type="submit" value="Select this time slot" id = "timeSubmit">
+        </table>
     </div>
 </div>
 <script>
-     
+
 </script>
