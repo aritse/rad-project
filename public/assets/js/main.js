@@ -155,22 +155,7 @@ $(document).ready(function () {
       type: "GET",
       data: jobDate        //send this input to table.
     }).then(function(jobDate){
-      var container = $('<div class "container" id = "timeSlotContainer"></div>');
-      $("body").append(container);
-      var wrapper = $('<div class = "wrapper"></div>');
-      $(container).append(wrapper);
-      var table = $('<table id = "timeSlotForm"></table>');
-      $(wrapper).append(table);
-      var head = $(table[0].insertRow(-1))
-      var hOne = $('<th></th>');
-      hOne.html("Start time available");
-      var hTwo = $('<th></th>');
-      hTwo.html("Estimated end time");
-      var hThree = $('<th></th>');
-      hThree.html("Number of workers required");
-      head.append(hOne);
-      head.append(hTwo);
-      head.append(hThree);
+      var table = $("#timeSlotForm")
       for(var i = 1; i < jobDate.length; i++){
           var row = table[i];
           for(var j = 0; j < 3; j++){
