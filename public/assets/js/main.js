@@ -167,7 +167,7 @@ $(document).ready(function () {
     });
   });
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        // not sure I've done this right
+  
 
   $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this).addClass("highlight").siblings().removeClass("highlight");
