@@ -49,4 +49,5 @@ module.exports = function (app) {
       res.render("service-menu", dbServiceMenu);
     });
   });
+
 };
