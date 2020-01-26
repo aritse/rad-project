@@ -151,23 +151,29 @@ $(document).ready(function () {
     event.preventDefault();
     const jobDate = { date: $("#serviceCalendar").val(), serviceId: $("#servicesDropdown").val() };
     $.ajax({
-      url: "/api/request/availability",//get availability from db
+      url: "/api/handymans",//get availability from db
       type: "GET",
       data: jobDate        //send this input to table.
-    }).then(function(jobDate){
+    }).then(function (jobData) {
       var table = $("#timeSlotForm")
-      for(var i = 1; i < jobDate.length; i++){
-          var row = table[i];
-          for(var j = 0; j < 3; j++){
-              var cell = $("<td> </td>")
-              cell.html(jobdate[i][j]);
-              row.append(cell);
-          };
+      for (var i = 1; i < jobData.length; i++) {
+        var row = $("<tr>"); //table[i];
+        table.append(row);
+        for (var j = 0; j < 3; j++) {
+          var cell = $("<td>");
+          cell.html(jobData[i][j]);
+          row.append(cell);
+        };
       };
     });
   });
+<<<<<<< HEAD
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   
+=======
+  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  // not sure I've done this right
+>>>>>>> chrispdev
 
   $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this).addClass("highlight").siblings().removeClass("highlight");
@@ -214,7 +220,7 @@ $(document).ready(function () {
       },
       error: function (err) {
         alert(err.responseJSON);
-       $("#loginForm")[0].reset();
+        $("#loginForm")[0].reset();
       }
     });
   });
@@ -241,23 +247,18 @@ $(document).ready(function () {
       }
     });
   });
- 
-  ("#updateStatus").on("click", function(event){
+
+  $("#updateStatus").on("click", function (event) {
     event.preventDefault();
     const newStatus = $("#updateServiceRequest").val();
     $.ajax({
       url: "/api/update/service",
       type: "PUT",
       data: newStatus
-    }).then(function(data){
-      console.log("status changed");      
+    }).then(function (data) {
+      console.log("status changed");
     });
   });
-
-  
-  $('select').material_select();
-  // ^^^^^^^^^^^^^^^^^^^ this makes the dropdown work.
-
 
 
   //for the service selection page Materialize will not show dropdowns by default

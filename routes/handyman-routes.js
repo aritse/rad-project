@@ -18,21 +18,22 @@ module.exports = function (app) {
 
     // GET route for getting all of the users
     app.get("/api/handymans", function (req, res) {
-        if (req.session.user) {
-            req.session.error = "";
-            req.session.statusCode = 200;
-
-            db.Handyman.findAll({}).then(function (dbHandyman) {
-                res.json(dbHandyman);
-            });
-        } else {
-            req.session.user = false;
-            req.session.error = "Not authenticated."
-            req.session.statusCode = 401;
+        let condition = {};
+        // if req.body.dates
+        if (req.query.date) {
+            condition = {
+                include: [db.ServiceRequest, db.Assignment]
+            }
         }
+
+        db.HandyMan.findAll(condition).then(function (dbHandyman) {
+            res.json(dbHandyman);
+        }).catch(err => {
+            return res.status(500).json(err.message);
+        });
     });
 
-    // GET Customer by ID
+    // GET Handyman by ID
     app.get("/api/handymans/:id", (req, res) => {
         db.HandyMan.findOne({ where: { id: req.params.id } })
             .then(function (dbHandyman) {
