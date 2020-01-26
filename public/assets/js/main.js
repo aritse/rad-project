@@ -167,13 +167,8 @@ $(document).ready(function () {
       };
     });
   });
-<<<<<<< HEAD
-// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  
-=======
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // not sure I've done this right
->>>>>>> chrispdev
 
   $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this).addClass("highlight").siblings().removeClass("highlight");
