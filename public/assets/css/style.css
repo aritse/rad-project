@@ -19,37 +19,36 @@ html, body {
     margin-top: 200px;
 }
 
-.content-container{
+.content-container {
     position: absolute;
     background-image: url("/assets/images/home_interior.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     /* width: 300px; */
     color: white;
-    width:100%;
+    width: 100%;
     text-align: center;
     color: black;
     /* align-items: center; */
- }
+}
 
-.content-wrapper{
+.content-wrapper {
     background: white;
     width: 80%;
-    min-height:80vh;
-    display:block;
-    width: fit-content; 
+    min-height: 80vh;
+    display: block;
+    width: fit-content;
     padding: 1px 30px 0px 30px;
     position: relative;
     left: 35%;
     top: 50%;
- 
 }
 
-.content-wrapper-login{
+.content-wrapper-login {
     width: 100%;
-    min-height:100vh;
-    display:block;
-     /* width: fit-content;    */
+    min-height: 100vh;
+    display: block;
+    /* width: fit-content;    */
     padding: 50px 30px 0px 30px;
     position: relative;
     /* left: 22%; */
@@ -57,10 +56,8 @@ html, body {
     color: black;
 }
 
-
-
-.login-wrapper a{
-   color:black;
+.login-wrapper a {
+    color: black;
 }
 
 .login-wrapper {
@@ -72,44 +69,40 @@ html, body {
     padding: 50px 40px 40px 40px;
     border: 1px solid gray;
     background: white;
-    color:black;
-    /* width: fit-content; */
-}
-.login-wrapper form {
-    width: 300px;
-    width:30%; 
-    margin:0 auto;
+    color: black;
     /* width: fit-content; */
 }
 
-.login-wrapper h4{
+.login-wrapper form {
+    width: 300px;
+    width: 30%;
+    margin: 0 auto;
+    /* width: fit-content; */
+}
+
+.login-wrapper h4 {
     margin-bottom: 50px;
 }
 
-
-
-.login-wrapper #submit-login-btn{
+.login-wrapper #submit-login-btn {
     background-color: #3c6873;
     width: 80%;
     margin: 15px;
     border-radius: 0px;
 }
 
-
-#reg-submit-btn{
-    background:  #3c6873;
-    width: 80%;
-}
-#handyreg-submit-btn{
-    background:  #3c6873;
+#reg-submit-btn {
+    background: #3c6873;
     width: 80%;
 }
 
+#handyreg-submit-btn {
+    background: #3c6873;
+    width: 80%;
+}
 
-
-#welcome-signup .row{
+#welcome-signup .row {
     margin-left: 95px;
-    
 }
 
 .content-container i {
@@ -189,15 +182,12 @@ button {
     padding: 4px;
 }
 
-
 #welcomeMessage {
     margin: 15px 0;
-    color:white;
+    color: white;
     text-shadow: 2px 2px #899fa6;
-
 }
 
-.highlight{
+.highlight {
     background: azure;
-
 }

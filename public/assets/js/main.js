@@ -48,21 +48,32 @@ $(document).ready(function () {
   });
 
   /**
+   * make_base_auth
+   * @description Takes username password
+   * returns "Basic " + base64 encoded "username:password"
+   * @param {string} u - username 
+   * @param {string} p - password
+   */
+  function make_base_auth(u, p) {
+    return "Basic " + btoa(u + ":" + p);
+  }
+
+  /**
    * On Register Submit, Register new user/customer
    */
   $("#reg-submit-btn").on("click", function (event) {
     event.preventDefault();
-
+    // grab username password for authorization header
+    let uname = $("#username").val().trim();
+    let pwrd = $("#password").val().trim();
     // build the userData object
     const userData = {
-      username: $("#username").val().trim(),
-      password: $("#password").val().trim(),
-      firstName: $("#first_name").val().trim(),
-      lastName: $("#last_name").val().trim(),
+      firstName: $("#firstName").val().trim(),
+      lastName: $("#lastName").val().trim(),
       address: $("#address").val().trim(),
       city: $("#city").val().trim(),
       state: $("#state").val().trim(),
-      zipCode: $("#zipcode").val().trim(),
+      zipCode: $("#zipCode").val().trim(),
       phoneNumber: $("#phoneNumber").val().trim(),
       email: $("#email").val().trim(),
     };
@@ -71,10 +82,12 @@ $(document).ready(function () {
     $.ajax({
       url: "/register",
       type: "POST",
-      data: userData
+      data: userData,
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', make_base_auth(uname, pwrd));
+      }
     }).then(
       function (data) {
-
         // store user in local storage
         localStorage.setItem("user", JSON.stringify(data));
 
@@ -90,17 +103,17 @@ $(document).ready(function () {
    */
   $("#handyreg-submit-btn").on("click", function (event) {
     event.preventDefault();
-
+    // get username and password for the Authorization header
+    let uname = $("#username").val().trim();
+    let pwrd = $("#password").val().trim();
     // build the userData object
     const userData = {
-      username: $("#username").val().trim(),
-      password: $("#password").val().trim(),
-      firstName: $("#first_name").val().trim(),
-      lastName: $("#last_name").val().trim(),
+      firstName: $("#firstName").val().trim(),
+      lastName: $("#lastName").val().trim(),
       address: $("#address").val().trim(),
       city: $("#city").val().trim(),
       state: $("#state").val().trim(),
-      zipCode: $("#zipcode").val().trim(),
+      zipCode: $("#zipCode").val().trim(),
       phoneNumber: $("#phoneNumber").val().trim(),
       email: $("#email").val().trim(),
     };
@@ -109,7 +122,11 @@ $(document).ready(function () {
     $.ajax({
       url: "/handyman-register",
       type: "POST",
-      data: userData
+      data: userData,
+      beforeSend: function (xhr) {
+        // create a Basic authorization header
+        xhr.setRequestHeader('Authorization', make_base_auth(uname, pwrd));
+      }
     }).then(
       function (data) {
 
@@ -174,14 +191,14 @@ $(document).ready(function () {
   $("#loginForm").on("submit", function (event) {
     event.preventDefault();
 
-    const loginData = {
-      username: $("#loginForm [name=username]").val().trim(),
-      password: $("#loginForm [name=password]").val().trim()
-    }
+    const uname = $("#loginForm [name=username]").val().trim();
+    const pwrd = $("#loginForm [name=password]").val().trim();
 
     $.ajax("/login", {
       method: "POST",
-      data: loginData,
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader('Authorization', make_base_auth(uname, pwrd));
+      },
       success: function (data) {
         localStorage.setItem("access_token", JSON.stringify(data.access_token));
         location.href = "/service-menu";
