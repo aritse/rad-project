@@ -2,8 +2,10 @@
 
 <div class = "container">
     <div class = "wrapper">
-        {{!-- get data in from database from servicerequests table as 'serviceRequests'--}}
-        <select name="updateServiceRequest" id="updateServiceRequest" style = "display: block">
+        {{!-- get data in from database from servicerequests table as 'serviceRequests'
+        
+        generate table here of today's jobs--}}
+        <select name="updateServiceRequest" id="updateServiceRequest">
             <option value={{ServiceMenuId}}>Change status to "scheduled"</option>
             <option value={{ServiceMenuId}}>Change status to "in process"</option>
             <option value={{ServiceMenuId}}>Change status to "complete"</option>

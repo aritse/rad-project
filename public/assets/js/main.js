@@ -154,21 +154,44 @@ $(document).ready(function () {
       url: "/api/handymans",//get availability from db
       type: "GET",
       data: jobDate        //send this input to table.
-    }).then(function (jobData) {
-      var table = $("#timeSlotForm")
-      for (var i = 1; i < jobData.length; i++) {
-        var row = $("<tr>"); //table[i];
-        table.append(row);
-        for (var j = 0; j < 3; j++) {
-          var cell = $("<td>");
-          cell.html(jobData[i][j]);
-          row.append(cell);
-        };
-      };
-    });
+    }).then(function (jobData) {      
+      let reqArray = [
+        {startTime: "0900", endTime: "1100"},
+        {startTime: "1000", endTime: "1200"},
+        {startTime: "1300", endTime: "1500"},
+        {startTime: "1400", endTime: "1600"},
+        {startTime: "1500", endTime: "1700"}
+      ]
+      var select = $("<select>").attr("style", "display:block").attr("id", "timeSelect").appendTo($("#availability"));
+      for(i = 0; i < reqArray.length; i++){
+        select.append($("<option>").attr("value", i).text(reqArray[i].startTime + " until " + reqArray[i].endTime));
+      }
+      $("<input>").attr("type", "submit").attr("id", "bookIt").attr("value", "Book It!").appendTo($("#availability"))
+    })
+    
   });
-  // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  // not sure I've done this right
+
+  $(document).on("click","#bookIt", function(event){
+    event.preventDefault();
+    console.log("click");
+      var booking = {
+        status: "scheduled",
+
+        ServiceMenuId : $("#servicesDropdown").val(),
+        startDate: $("#serviceCalendar").val(),
+        sHour: $("#timeSelect").val()//time only shows slot id, not values associated.
+      }
+      console.log(booking);
+      
+    // })
+
+    
+    $.ajax({
+      url: "/api/request",
+      type: "POST",
+      data: booking
+    })
+  });
 
   $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this).addClass("highlight").siblings().removeClass("highlight");
