@@ -103,40 +103,44 @@ $(document).ready(function () {
    */
   $("#handyreg-submit-btn").on("click", function (event) {
     event.preventDefault();
-    // get username and password for the Authorization header
-    let uname = $("#username").val().trim();
-    let pwrd = $("#password").val().trim();
-    // build the userData object
-    const userData = {
-      firstName: $("#firstName").val().trim(),
-      lastName: $("#lastName").val().trim(),
-      address: $("#address").val().trim(),
-      city: $("#city").val().trim(),
-      state: $("#state").val().trim(),
-      zipCode: $("#zipCode").val().trim(),
-      phoneNumber: $("#phoneNumber").val().trim(),
-      email: $("#email").val().trim(),
-    };
+    try {
 
-    //Send the POST request.
-    $.ajax({
-      url: "/handyman-register",
-      type: "POST",
-      data: userData,
-      beforeSend: function (xhr) {
-        // create a Basic authorization header
-        xhr.setRequestHeader('Authorization', make_base_auth(uname, pwrd));
-      }
-    }).then(
-      function (data) {
+      // get username and password for the Authorization header
+      let uname = $("#username").val().trim();
+      let pwrd = $("#password").val().trim();
+      // build the userData object
+      const userData = {
+        firstName: $("#firstName").val().trim(),
+        lastName: $("#lastName").val().trim(),
+        address: $("#address").val().trim(),
+        city: $("#city").val().trim(),
+        state: $("#state").val().trim(),
+        zipCode: $("#zipCode").val().trim(),
+        phoneNumber: $("#phoneNumber").val().trim(),
+        email: $("#email").val().trim(),
+      };
 
-        // store user in local storage
-        localStorage.setItem("user", JSON.stringify(data));
-
-        // Reload the page to get the updated list
-        location.href = "/service-menu";
-      }
-    );
+      //Send the POST request.
+      $.ajax({
+        url: "/handyman-register",
+        type: "POST",
+        data: userData,
+        beforeSend: function (xhr) {
+          // create a Basic authorization header
+          xhr.setRequestHeader('Authorization', make_base_auth(uname, pwrd));
+        },
+        success: function (data) {
+          // Reload the page to get the updated list
+          location.href = "/service-menu";
+        },
+        error: function (err) {
+          // Reload the page to get the updated list
+          alert(err);
+        }
+      });
+    } catch (err) {
+      alert(err);
+    }
   });
 
 

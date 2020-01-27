@@ -22,7 +22,7 @@ module.exports = function (app) {
         let condition = {
             include: [{ model: db.ServiceRequest, required: false }]
         };
-        // if req.body.dates
+
         if (req.query.date) {
             let date = moment(req.query.date);
             date = date.startOf('day');
