@@ -10,7 +10,8 @@
 var db = require("../models");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const moment = require('moment');
+const { Op } = require("sequelize");
 
 // Routes
 // =============================================================
@@ -18,21 +19,37 @@ module.exports = function (app) {
 
     // GET route for getting all of the users
     app.get("/api/handymans", function (req, res) {
-        if (req.session.user) {
-            req.session.error = "";
-            req.session.statusCode = 200;
+        let condition = {
+            include: [{ model: db.ServiceRequest, required: false }]
+        };
 
-            db.Handyman.findAll({}).then(function (dbHandyman) {
-                res.json(dbHandyman);
-            });
-        } else {
-            req.session.user = false;
-            req.session.error = "Not authenticated."
-            req.session.statusCode = 401;
+        if (req.query.date) {
+            let date = moment(req.query.date);
+            date = date.startOf('day');
+            let date2 = moment(req.query.date);
+            date2 = date2.endOf('day');
+            condition = {
+                include: [{
+                    model: db.ServiceRequest,
+                    where: {
+                        startTime: {
+                            [Op.gte]: date,
+                            [Op.lte]: date2
+                        }
+                    },
+                    required: false
+                }]
+            }
         }
+
+        db.HandyMan.findAll(condition).then(function (dbHandyman) {
+            res.json(dbHandyman);
+        }).catch(err => {
+            return res.status(500).json(err.message);
+        });
     });
 
-    // GET Customer by ID
+    // GET Handyman by ID
     app.get("/api/handymans/:id", (req, res) => {
         db.HandyMan.findOne({ where: { id: req.params.id } })
             .then(function (dbHandyman) {
@@ -56,43 +73,82 @@ module.exports = function (app) {
 
     // post for handyman login, JWT Auth
     app.post("/handyman-login", function (req, res) {
-        const username = req.body.username;
-        const password = req.body.password;
+        /* Get user&password from the Auth header */
+        // we expect the header to be 'Basic btoa(username:password)'
+        // authHedr is the base64 encoded string "username:password"
+        let authHedr = req.get('Authorization').split(" ")[1];
+        // we convert the base64 buffer to a string
+        authHedr = Buffer.from(authHedr, 'Base64').toString();
+        // we extract the username and password by spliting on :
+        const username = authHedr.split(":")[0];
+        const password = authHedr.split(":")[1];
 
         db.User.findOne({
-            where: {
-                username
-            },
-            include: [db.HandyMan]
-        }).then(function (user) {
-            if (!user) {
+            /**
+             * We use ES6 Object Deconstruction here on "username".
+             * Because the variable name "username" is the same as
+             * the key in the table "username", Javascript knows we
+             * mean {"username":username}.
+             */
+            where: { username }
+        }).then(function (dbUser) {
+            if (!dbUser) {
                 req.session.user = false;
                 req.session.error = "No User Found";
                 return res.status(404).json("No user found");
             }
-            const result = bcrypt.compareSync(password, user.password);
+            // console.log(dbUser);
+
+            const result = bcrypt.compareSync(password, dbUser.password);
             if (!result) return res.status(401).json("Username or Password incorrect");
 
             db.HandyMan.findOne({
                 where: {
-                    UserId: user.id
+                    UserId: dbUser.id
                 }
             }).then(handyman => {
-                if (!handyman) return res.status(404).json("No User Found");
-                const expiresIn = 24 * 60 * 60;
-                const accessToken = jwt.sign({ id: user.id, username: user.username }, process.env.SESSION_SECRET, { expiresIn });
+                if (!handyman) {
+                    req.session.user = false;
+                    req.session.error = "No User Found";
+                    return res.status(404).json("No User Found");
+                }
+                // console.log("HandyMan", handyman);
 
-                res.status(200).json({ handyman, "access_token": accessToken, "expires_in": expiresIn });
+                const user = { id: handyman.id, username: handyman.username };
+                req.session.user = user;
+                req.session.error = "";
+                const expiresIn = 24 * 60 * 60;
+                const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
+
+                res.status(200).json({ user: user, handyman, "access_token": accessToken, "expires_in": expiresIn });
             })
         }).catch(err => {
-            res.status(500).send(err.stack);
+            req.session.user = false;
+            req.session.error = "Failed creating handyman";
+            if (err.parent && err.parent.sqlMessage) {
+                return res.status(500).json(err.parent.sqlMessage);
+            } else {
+                return res.status(500).json(err.stack);
+            }
         });
     });
 
-    // post for register, JWT Auth
+    /**
+     * ROUTE: /handyman-register
+     * @description POST request for creating a new Handyman User
+     * @accepts User and Handyman information over req.body
+     */
     app.post("/handyman-register", function (req, res) {
-        const username = req.body.username;
-        const password = bcrypt.hashSync(req.body.password);
+        /* Get user&password from the Auth header */
+        // we expect the header to be 'Basic btoa(username:password)'
+        // authHedr is the base64 encoded string "username:password"
+        let authHedr = req.get('Authorization').split(" ")[1];
+        // we convert the base64 buffer to a string
+        authHedr = Buffer.from(authHedr, 'Base64').toString();
+        // we extract the username and password by spliting on :
+        const username = authHedr.split(":")[0];
+        let password = authHedr.split(":")[1];
+        password = bcrypt.hashSync(password);
         const isAdmin = req.body.isAdmin || 1;
 
         db.User.create({ username, password, isAdmin }).then(function (dbUser) {
@@ -103,21 +159,27 @@ module.exports = function (app) {
                 streetAddress: req.body.address,
                 city: req.body.city,
                 state: req.body.state,
-                zipCode: req.body.zipCode,
+                zipCode: req.body.zipcode,
                 email: req.body.email,
                 phoneNumber: req.body.phoneNumber,
                 UserId: dbUser.id
             }
 
             db.HandyMan.create(handyman).then(function (dbHandyman) {
+                req.session.user = user;
+                req.session.error = "";
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, "handymanInfo": dbHandyman, "access_token": accessToken, "expires_in": expiresIn });
             }).catch(err => {
+                req.session.user = false;
+                req.session.error = "Failed creating handyman";
                 res.status(500).json(err.stack);
             })
         }).catch(err => {
-            res.status(500).json(err.stack);
+            req.session.user = false;
+            req.session.error = "Failed creating User prior to handyman";
+            res.status(500).json(err.parent.sqlMessage);
         });
     });
 };

@@ -35,7 +35,7 @@
     "handlebars-form-helpers": "^0.1.4",
     "hbs": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
-    "materialize-css": "^1.0.0-rc.2",
+    "moment": "^2.24.0",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.2",
     "sequelize": "^5.21.3"

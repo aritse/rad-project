@@ -105,3 +105,4 @@ dist
 
 # Dot env 
 .env
+package-lock.json
