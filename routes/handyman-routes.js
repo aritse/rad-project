@@ -10,7 +10,8 @@
 var db = require("../models");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const moment = require('moment');
+const { Op } = require("sequelize");
 
 // Routes
 // =============================================================
@@ -18,11 +19,26 @@ module.exports = function (app) {
 
     // GET route for getting all of the users
     app.get("/api/handymans", function (req, res) {
-        let condition = {};
+        let condition = {
+            include: [db.ServiceRequest]
+        };
         // if req.body.dates
         if (req.query.date) {
+            let date = moment(req.query.date);
+            date = date.startOf('day');
+            let date2 = moment(req.query.date);
+            date2 = date2.endOf('day');
             condition = {
-                include: [db.ServiceRequest, db.Assignment]
+                include: [{
+                    model: db.ServiceRequest,
+                    where: {
+                        startTime: {
+                            [Op.gte]: date,
+                            [Op.lte]: date2
+                        }
+                    },
+                    required: false
+                }]
             }
         }
 
