@@ -20,7 +20,7 @@ module.exports = function (app) {
     // GET route for getting all of the users
     app.get("/api/handymans", function (req, res) {
         let condition = {
-            include: [db.ServiceRequest]
+            include: [{ model: db.ServiceRequest, required: false }]
         };
         // if req.body.dates
         if (req.query.date) {
