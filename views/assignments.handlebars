@@ -2,13 +2,19 @@
 
 <div class = "container">
     <div class = "wrapper">
-        {{!-- get data in from database from servicerequests table as 'serviceRequests'
+        {{!-- get data in from database from servicerequests table and servicemenus(to display service name) as 'serviceRequests'--}}
+        <h4>You are currently assigned to the following services:</h4>
+        <ul>
+            {{#each serviceRequests}}
+                <li>Service ID: {{ServiceMenuId}}, to {{title}} at {{streetAddress}} at {{startTime}} </li>
+            {{/each}}
+        </ul>
+
         
-        generate table here of today's jobs--}}
         <select name="updateServiceRequest" id="updateServiceRequest">
-            <option value={{ServiceMenuId}}>Change status to "scheduled"</option>
-            <option value={{ServiceMenuId}}>Change status to "in process"</option>
-            <option value={{ServiceMenuId}}>Change status to "complete"</option>
+            <option value={{ServiceMenuId}}>Change status of {{title}} to "scheduled"</option>
+            <option value={{ServiceMenuId}}>Change status of {{title}} to "in process"</option>
+            <option value={{ServiceMenuId}}>Change status of {{title}} to "complete"</option>
         </select>
         <input type="submit" value="Update status" id = "updatestatus">
 

@@ -53,8 +53,7 @@ html, body {
     position: relative;
     left: 10%;
     top: 50%;
- 
-}
+ }
 
 .content-wrapper-login {
     width: 100%;
@@ -89,7 +88,7 @@ html, body {
     /* width: fit-content; */
 }
 
-.login-wrapper form {
+.login-wrapper form{
     width: 300px;
     width: 30%;
     margin: 0 auto;
@@ -117,9 +116,22 @@ html, body {
     width: 80%;
 }
 
-#welcome-signup .row {
-    margin-left: 95px;
+#welcome-signup {
+    margin-top: 50px;
 }
+
+#welcome-signup .left{
+    margin-left: 400px;
+}
+
+#welcome-signup .right-top{
+    margin-right: 400px;
+}
+
+#welcome-signup .right-bottom{
+    margin-right: 300px;
+}
+
 
 .content-container i {
     font-size: 25px;
@@ -130,7 +142,7 @@ html, body {
     /* background-repeat: no-repeat; */
     background-size: cover;
     width: 300px;
-    height: 500px;
+    height: 625px;
     color: white;
     width: 100%;
     text-align: center;
@@ -142,6 +154,7 @@ html, body {
 
 #welcome-signup a {
     color: black;
+    
 }
 
 #selectedService {
@@ -211,3 +224,24 @@ button {
 #timeSlotContainer {
     display: none;
 }
+
+/* service-menu page */
+ input[type=submit]{
+    background: #3c6873;
+    color:white;
+    width: 80%;
+    padding: 4px;
+} 
+
+button[type=submit]{
+    background: #3c6873;
+    color:white;
+    width: 80%;
+    padding: 4px;
+} 
+.cal-wrapper{
+    margin-bottom: 50px;
+}
+ #calendarSubmit{
+   margin-top: 20px;
+} 
