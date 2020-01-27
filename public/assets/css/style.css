@@ -233,6 +233,12 @@ button {
     padding: 4px;
 } 
 
+button[type=submit]{
+    background: #3c6873;
+    color:white;
+    width: 80%;
+    padding: 4px;
+} 
 .cal-wrapper{
     margin-bottom: 50px;
 }

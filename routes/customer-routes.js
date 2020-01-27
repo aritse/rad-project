@@ -170,7 +170,7 @@ module.exports = function (app) {
                 city: req.body.city,
                 state: req.body.state,
                 email: req.body.email,
-                zipCode: req.body.zipcode,
+                zipCode: req.body.zipCode,
                 phoneNumber: req.body.phoneNumber,
                 UserId: dbUser.id
             }

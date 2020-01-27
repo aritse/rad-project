@@ -16,15 +16,17 @@
         <div class="cal-wrapper">
             <form>
                 <input type="date" min="2020-01" id="serviceCalendar">
-                <input type="submit" value="Select a date" id="calendarSubmit">
+                <input type="submit" value="Select a Date" id="calendarSubmit">
             </form>
         </div>
 
         <h4>Select a Time Slot</h4>
-        <table id="timeSlotForm">
-            <th>Start time available</th>
-            <th>Estimated end time</th>
-            <th>Number of workers required</th>
+        <table id= "timeSlotForm" class= "center">
+        <thead>
+            <th>Start Time Available</th>
+            <th>Estimated End Time</th>
+            <th>Number Handymen Required</th>
+        </thead>
             {{!-- The code below had been on its own page (service-selection)
 handlebars won't wait for this information. This need to be handled in the js file.
             {{#each timeSlots}}
@@ -35,10 +37,11 @@ handlebars won't wait for this information. This need to be handled in the js fi
             </tr>
 
             {{/each}} --}}
-        </table>
+        {{!-- </table> --}}
+        
 
-        <input type="submit" value="Select this time slot" id="timeSubmit">
-        </table>
+        <input type="submit" value="Select Time Slot" id="timeSubmit">
+        
     </div>
 </div>
 <script>
