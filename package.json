@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest test/*.test.js --verbose",
-    "run": "node server.js",
+    "start": "node server.js",
     "watch": "nodemon server.js"
   },
   "repository": {
@@ -35,6 +35,7 @@
     "handlebars-form-helpers": "^0.1.4",
     "hbs": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
     "mysql2": "^2.1.0",
     "nodemon": "^2.0.2",
     "sequelize": "^5.21.3"
