@@ -1,9 +1,30 @@
 var db = require("../models");
+var moment = require("moment");
 
 module.exports = function(app) {
   app.post("/api/request", function(req, res) {
-    db.ServiceRequest.create(req.body).then(function(dbServiceRequest) {
-      res.render("confirm", dbServiceRequest);
+    // find customer by userid in session
+    if (!req.session.user) // needs to be updated for production - testing currently
+      req.session.user.id = 1;
+    db.Customer.findOne({include:[{
+      model: db.User,
+      where: { Id: req.session.user.id }
+    }]}).then(userData =>{
+      // store CustomerId on body
+      req.body.CustomerId = userData.id;
+      req.body.streetAddress = userData.streetAddress;
+      req.body.city = userData.city;
+      req.body.state = userData.state;
+      req.body.zipCode = userData.zipCode;
+      req.body.startTime = moment(req.body.startDate)
+      req.body.startTime.hour(req.body.sHour)
+
+      delete req.body.sHour;
+      delete req.body.startDate;
+      // submit ServiceRequest query
+      db.ServiceRequest.create(req.body).then(function(dbServiceRequest) {
+        res.render("confirm", dbServiceRequest);
+      });
     });
   });
 
