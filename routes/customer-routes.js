@@ -87,13 +87,23 @@ module.exports = function (app) {
      * @description PUT route for updating users. The updated Customer data will be available in req.body
      */
     app.put("/api/customers/:id", function (req, res) {
-        db.Customer.update(req.body, {
-            where: {
-                id: req.params.id
-            }
-        }).then(function (dbCustomer) {
-            res.json(dbCustomer);
-        });
+        if (req.session.user && req.session.isHandy) {
+            db.HandyMan.update(req.body, {
+                where: {
+                    id: req.params.id
+                }
+            }).then(function (dbHandyMan) {
+                res.json(dbHandyMan);
+            });
+        } else {
+            db.Customer.update(req.body, {
+                where: {
+                    id: req.params.id
+                }
+            }).then(function (dbCustomer) {
+                res.json(dbCustomer);
+            });
+        }
     });
 
     /**
