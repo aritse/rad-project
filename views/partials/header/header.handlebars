@@ -8,6 +8,7 @@
             <li><a href="/user-info">User Info</a></li>
             {{#unless isHandy}}<li><a href="/login">Logout</a></li>{{/unless}}
             {{#if isHandy}}<li><a href="/handyman-login">Logout</a></li>{{/if}}
+            {{#if isAdmin}}{{> admin/admin-link }}{{/if}}
         </ul>
     </div>
 </nav>
