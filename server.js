@@ -29,6 +29,7 @@ require("./routes/customer-routes")(app);
 require("./routes/handyman-routes")(app);
 require("./routes/service-menu-routes")(app);
 require("./routes/service-request-routes")(app);
+require("./routes/admin-routes")(app);
 
 db.sequelize.sync({ force: false }).then(function () {
   app.listen(PORT, function (err) {

@@ -9,6 +9,7 @@ module.exports = function (app) {
             req.session.user = false;
             req.session.error = "";
             req.session.isHandy = false;
+            req.session.isAdmin = false;
             res.render("index");
         } else if (!req.session.isHandy) {
             res.redirect("/service-menu");
@@ -23,6 +24,7 @@ module.exports = function (app) {
         req.session.user = false;
         req.session.error = "";
         req.session.isHandy = false;
+        req.session.isAdmin = false;
         res.render("register");
     });
 
@@ -32,6 +34,7 @@ module.exports = function (app) {
         req.session.user = false;
         req.session.error = "";
         req.session.isHandy = false;
+        req.session.isAdmin = false;
         res.render("login");
     });
 
@@ -71,10 +74,10 @@ module.exports = function (app) {
     app.get("/update-service", function (req, res) {
         if (req.session.user) {
             let isHandy = req.session.isHandy;
-            res.render("assignments", { isHandy });
+            let isAdmin = req.session.isAdmin;
+            res.render("assignments", { isHandy, isAdmin });
         } else {
             res.render("login");
         }
     });
-
 };

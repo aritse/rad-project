@@ -117,6 +117,7 @@ module.exports = function (app) {
                 req.session.user = user;
                 req.session.error = "";
                 req.session.isHandy = true;
+                req.session.isAdmin = dbUser.isAdmin;
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
 
@@ -170,6 +171,7 @@ module.exports = function (app) {
                 req.session.user = user;
                 req.session.isHandy = true;
                 req.session.error = "";
+                req.session.isAdmin = user.isAdmin;
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, "handymanInfo": dbHandyman, "access_token": accessToken, "expires_in": expiresIn });
