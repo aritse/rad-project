@@ -23,8 +23,8 @@ $(document).ready(function () {
       data: userData
     }).then(function (data) {
       // Reload the page to get the updated list
-      alert("Successfully updated the customer information");
-      location.href = "/customer-info";
+      alert("Successfully updated the user information");
+      location.href = "/user-info";
     });
   });
   // init New Service Form as hidden
