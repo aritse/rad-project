@@ -5,10 +5,14 @@ module.exports = function (app) {
     // GET route for getting all of the todos
     app.get("/", function (req, res) {
         // reset session user
-        req.session.user = false;
-        req.session.error = "";
-        req.session.isHandy = false;
-        res.render("index");
+        if (!req.session.user) {
+            req.session.user = false;
+            req.session.error = "";
+            req.session.isHandy = false;
+            res.render("index");
+        } else {
+            res.render("service-menu");
+        }
     });
 
     // GET route for creating a register
