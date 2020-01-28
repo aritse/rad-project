@@ -1,12 +1,13 @@
 var db = require("../models");
 const Handlebars = require('handlebars');
+const acronym = require('acronym');
 
 module.exports = function (app) {
     app.get("/admin", function (req, res) {
         if (!req.session.isAdmin) {
             res.redirect("/");
         } else {
-            res.render('partials/admin/index', { isAdmin: req.session.isAdmin, isHandy: req.session.isHandy, });
+            res.render('partials/admin/index', { isAdmin: req.session.isAdmin, isHandy: req.session.isHandy, title: acronym('RAD') });
         }
     });
 
@@ -18,7 +19,7 @@ module.exports = function (app) {
                 raw: true,
                 include: [db.User]
             }).then(customer => {
-                res.render("partials/admin/edit-customer", { isAdmin: req.session.isAdmin, isHandy: req.session.isHandy, customer });
+                res.render("partials/admin/edit-customer", { isAdmin: req.session.isAdmin, isHandy: req.session.isHandy, customer, title: acronym('RAD') });
             });
         }
     })

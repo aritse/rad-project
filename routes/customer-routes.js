@@ -1,6 +1,9 @@
 var db = require("../models");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const acronym = require('acronym');
+
+
 
 module.exports = function (app) {
 
@@ -30,7 +33,8 @@ module.exports = function (app) {
                         phoneNumber: dbCustomer.phoneNumber,
                         email: dbCustomer.email,
                         userId: dbCustomer.userId,
-                        isHandy: false
+                        isHandy: false,
+                        title: acronym("RAD")
                     }
                     res.render("customer-info", customer);
                 });
@@ -52,7 +56,8 @@ module.exports = function (app) {
                         phoneNumber: dbHandyman.phoneNumber,
                         email: dbHandyman.email,
                         userId: dbHandyman.userId,
-                        isHandy: true
+                        isHandy: true,
+                        title: acronym('RAD')
                     }
                     res.render("customer-info", handyMan);
                 });
