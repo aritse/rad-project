@@ -194,9 +194,6 @@ $(document).ready(function () {
       data: booking
     }).then(bookedService => {
       alert(JSON.stringify(bookedService, null, 2));
-    }).failure(err => {
-      alert(err);
-      console.log('err:', err);
     });
   });
 
