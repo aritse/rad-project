@@ -180,24 +180,24 @@ $(document).ready(function () {
 
   $(document).on("click", "#bookIt", function (event) {
     event.preventDefault();
-    console.log("click");
+
     var booking = {
       status: "scheduled",
-
       ServiceMenuId: $("#servicesDropdown").val(),
       startDate: $("#serviceCalendar").val(),
       sHour: $("#timeSelect").val()//time only shows slot id, not values associated.
     }
-    console.log(booking);
-
-    // })
-
 
     $.ajax({
       url: "/api/request",
       type: "POST",
       data: booking
-    })
+    }).then(bookedService => {
+      alert(JSON.stringify(bookedService, null, 2));
+    }).failure(err => {
+      alert(err);
+      console.log('err:', err);
+    });
   });
 
   $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
