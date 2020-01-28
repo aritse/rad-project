@@ -5,32 +5,58 @@ const jwt = require('jsonwebtoken');
 module.exports = function (app) {
 
     // update customer info view
-    app.get("/customer-info", function (req, res) {
+    app.get("/user-info", function (req, res) {
         if (!req.session.user) {
             req.session.user = false;
             req.session.error = "No session, please login"
+            req.session.isHandy = false;
             return res.redirect("/");
         } else {
-            db.Customer.findOne({
-                where: {
-                    UserId: req.session.user.id
-                },
-                include: [db.User]
-            }).then(dbCustomer => {
-                const customer = {
-                    id: dbCustomer.id,
-                    firstName: dbCustomer.firstName,
-                    lastName: dbCustomer.lastName,
-                    streetAddress: dbCustomer.streetAddress,
-                    city: dbCustomer.city,
-                    state: dbCustomer.state,
-                    zipCode: dbCustomer.zipCode,
-                    phoneNumber: dbCustomer.phoneNumber,
-                    email: dbCustomer.email,
-                    userId: dbCustomer.userId
-                }
-                res.render("customer-info", customer);
-            });
+            if (!req.session.isHandy) {
+                db.Customer.findOne({
+                    where: {
+                        UserId: req.session.user.id
+                    },
+                    include: [db.User]
+                }).then(dbCustomer => {
+                    const customer = {
+                        id: dbCustomer.id,
+                        firstName: dbCustomer.firstName,
+                        lastName: dbCustomer.lastName,
+                        streetAddress: dbCustomer.streetAddress,
+                        city: dbCustomer.city,
+                        state: dbCustomer.state,
+                        zipCode: dbCustomer.zipCode,
+                        phoneNumber: dbCustomer.phoneNumber,
+                        email: dbCustomer.email,
+                        userId: dbCustomer.userId,
+                        isHandy: false
+                    }
+                    res.render("customer-info", customer);
+                });
+            } else {
+                db.HandyMan.findOne({
+                    where: {
+                        UserId: req.session.user.id
+                    },
+                    include: [db.User]
+                }).then(dbHandyman => {
+                    const handyMan = {
+                        id: dbHandyman.id,
+                        firstName: dbHandyman.firstName,
+                        lastName: dbHandyman.lastName,
+                        streetAddress: dbHandyman.streetAddress,
+                        city: dbHandyman.city,
+                        state: dbHandyman.state,
+                        zipCode: dbHandyman.zipCode,
+                        phoneNumber: dbHandyman.phoneNumber,
+                        email: dbHandyman.email,
+                        userId: dbHandyman.userId,
+                        isHandy: true
+                    }
+                    res.render("customer-info", handyMan);
+                });
+            }
         }
     });
 
@@ -112,12 +138,13 @@ module.exports = function (app) {
 
                 /* Successful login */
                 // create a user object to store in the session
-                const user = { id: dbUser.id, username: dbUser.username };
+                const user = { id: dbUser.id, username: dbUser.username, isAdmin: dbUser.isAdmin };
                 const expiresIn = 24 * 60 * 60;
 
                 // store session user
                 req.session.user = user;
                 req.session.error = "";
+                req.session.isHandy = false;
 
                 // JWT token
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
@@ -129,6 +156,7 @@ module.exports = function (app) {
             // remove session user
             req.session.user = false;
             req.session.error = "Failed creating customer";
+            req.session.isHandy = false;
 
             // return error message
             if (err.parent && err.parent.sqlMessage) {
@@ -162,7 +190,7 @@ module.exports = function (app) {
 
         // Create user
         db.User.create({ username, password, isAdmin }).then(function (dbUser) {
-            const user = { id: dbUser.id, username: dbUser.username };
+            const user = { id: dbUser.id, username: dbUser.username, isAdmin: dbUser.isAdmin };
             const customer = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
@@ -180,6 +208,7 @@ module.exports = function (app) {
                 // create session user
                 req.session.user = user;
                 req.session.error = "";
+                req.session.isHandy = false;
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
                 res.status(200).json({ user, "customerInfo": dbCustomer, "access_token": accessToken, "expires_in": expiresIn });
@@ -187,6 +216,7 @@ module.exports = function (app) {
                 // remove session user
                 req.session.user = false;
                 req.session.error = "Failed creating customer";
+                req.session.isHandy = false;
 
                 // return error message
                 if (err.parent && err.parent.sqlMessage) {
@@ -199,6 +229,7 @@ module.exports = function (app) {
             // remove session user
             req.session.user = false;
             req.session.error = "Failed creating customer";
+            req.session.isHandy = false;
 
             // return error message
             if (err.parent && err.parent.sqlMessage) {

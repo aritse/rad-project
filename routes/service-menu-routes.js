@@ -13,16 +13,21 @@ module.exports = function (app) {
 
   //this is covered in service-menu-routes
   app.get("/service-menu", function (req, res) {
-    db.ServiceMenu.findAll({ raw: true }).then(function (data) {
-      var datObject = {
-        servicemenus: data
-      };
-      res.render("service-menu", datObject);
-    })
-      .catch(err => console.log(err));
+    if (req.session.user) {
+      db.ServiceMenu.findAll({ raw: true }).then(function (data) {
+        var datObject = {
+          servicemenus: data,
+          isHandy: req.session.isHandy
+        };
+        res.render("service-menu", datObject);
+      })
+        .catch(err => console.log(err));
+    } else {
+      res.render("login");
+    }
   })
 
-  
+
   app.get("/api/menu", function (req, res) {
     db.ServiceMenu.findAll({ raw: true }).then(function (dbServiceMenu) {
       console.log(dbServiceMenu)
@@ -50,7 +55,7 @@ module.exports = function (app) {
     });
   });
 
-  
+
   app.delete("/api/menu/:id", function (req, res) {
     db.ServiceMenu.destroy({ where: { id: req.params.id } }).then(function (dbServiceMenu) {
       res.render("service-menu", dbServiceMenu);
