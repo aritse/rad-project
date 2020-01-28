@@ -95,9 +95,9 @@ module.exports = function (app) {
             if (!dbUser) {
                 req.session.user = false;
                 req.session.error = "No User Found";
+                req.session.isHandy = false;
                 return res.status(404).json("No user found");
             }
-            // console.log(dbUser);
 
             const result = bcrypt.compareSync(password, dbUser.password);
             if (!result) return res.status(401).json("Username or Password incorrect");
@@ -112,11 +112,11 @@ module.exports = function (app) {
                     req.session.error = "No User Found";
                     return res.status(404).json("No User Found");
                 }
-                // console.log("HandyMan", handyman);
 
-                const user = { id: handyman.id, username: handyman.username };
+                const user = { id: dbUser.id, username: dbUser.username, isAdmin: dbUser.isAdmin, isHandy: true };
                 req.session.user = user;
                 req.session.error = "";
+                req.session.isHandy = true;
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
 
@@ -125,6 +125,7 @@ module.exports = function (app) {
         }).catch(err => {
             req.session.user = false;
             req.session.error = "Failed creating handyman";
+            req.session.isHandy = false;
             if (err.parent && err.parent.sqlMessage) {
                 return res.status(500).json(err.parent.sqlMessage);
             } else {
@@ -152,14 +153,14 @@ module.exports = function (app) {
         const isAdmin = req.body.isAdmin || 1;
 
         db.User.create({ username, password, isAdmin }).then(function (dbUser) {
-            const user = { id: dbUser.id, username: dbUser.username };
+            const user = { id: dbUser.id, username: dbUser.username, isAdmin, isHandy: true };
             const handyman = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 streetAddress: req.body.address,
                 city: req.body.city,
                 state: req.body.state,
-                zipCode: req.body.zipcode,
+                zipCode: req.body.zipCode,
                 email: req.body.email,
                 phoneNumber: req.body.phoneNumber,
                 UserId: dbUser.id
@@ -167,6 +168,7 @@ module.exports = function (app) {
 
             db.HandyMan.create(handyman).then(function (dbHandyman) {
                 req.session.user = user;
+                req.session.isHandy = true;
                 req.session.error = "";
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign(user, process.env.SESSION_SECRET, { expiresIn });
@@ -174,11 +176,13 @@ module.exports = function (app) {
             }).catch(err => {
                 req.session.user = false;
                 req.session.error = "Failed creating handyman";
+                req.session.isHandy = false;
                 res.status(500).json(err.stack);
             })
         }).catch(err => {
             req.session.user = false;
             req.session.error = "Failed creating User prior to handyman";
+            req.session.isHandy = false;
             res.status(500).json(err.parent.sqlMessage);
         });
     });

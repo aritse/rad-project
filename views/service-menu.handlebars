@@ -3,7 +3,7 @@
 <div class="content-container center-align">
 
     <div class="content-wrapper-svc">
-        <h3>Customer Schedule A Service</h3>
+        <h3>{{#unless isHandy}}Customer {{/unless}}Schedule A Service</h3>
         <div class="svc-dropwrapper">
             <select name="Services" id="servicesDropdown">
                 <option value="none">Select the service you need</option>
@@ -12,7 +12,7 @@
                 {{/each}}
             </select>
         </div>
-  
+
         <div class="cal-wrapper">
             <form>
                 <input type="date" min="2020-01" id="serviceCalendar">

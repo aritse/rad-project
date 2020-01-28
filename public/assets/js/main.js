@@ -1,47 +1,27 @@
 // Make sure we wait to attach our handlers until the DOM is fully loaded.
-$(document).ready(function() {
-  $(".updateCustomerForm").on("submit", function(event) {
+$(document).ready(function () {
+  $(".updateCustomerForm").on("submit", function (event) {
     event.preventDefault();
     // build the userData object
     const userData = {
-      firstName: $("#firstName")
-        .val()
-        .trim(),
-      lastName: $("#lastName")
-        .val()
-        .trim(),
-      streetAddress: $("#streetAddress")
-        .val()
-        .trim(),
-      city: $("#city")
-        .val()
-        .trim(),
-      state: $("#state")
-        .val()
-        .trim(),
-      zipCode: $("#zipCode")
-        .val()
-        .trim(),
-      phoneNumber: $("#phoneNumber")
-        .val()
-        .trim(),
-      email: $("#email")
-        .val()
-        .trim()
+      firstName: $("#firstName").val().trim(),
+      lastName: $("#lastName").val().trim(),
+      streetAddress: $("#streetAddress").val().trim(),
+      city: $("#city").val().trim(),
+      state: $("#state").val().trim(),
+      zipCode: $("#zipCode").val().trim(),
+      phoneNumber: $("#phoneNumber").val().trim(),
+      email: $("#email").val().trim()
     };
 
-    const url =
-      "/api/customers/" +
-      $("#id")
-        .val()
-        .trim();
+    const url = "/api/customers/" + $("#id").val().trim();
 
     //Send the POST request.
     $.ajax({
       url: url,
       type: "PUT",
       data: userData
-    }).then(function(data) {
+    }).then(function (data) {
       // Reload the page to get the updated list
       alert("Successfully updated the customer information");
       location.href = "/customer-info";
@@ -54,7 +34,7 @@ $(document).ready(function() {
   /**
    * Toggle show/hide the New Service Form
    */
-  $("#addServiceBtn").on("click", function(event) {
+  $("#addServiceBtn").on("click", function (event) {
     event.preventDefault();
 
     addingService = !addingService;
@@ -80,7 +60,7 @@ $(document).ready(function() {
   /**
    * On Register Submit, Register new user/customer
    */
-  $("#reg-submit-btn").on("click", function(event) {
+  $("#reg-submit-btn").on("click", function (event) {
     event.preventDefault();
     // grab username password for authorization header
     let uname = $("#username")
@@ -91,30 +71,14 @@ $(document).ready(function() {
       .trim();
     // build the userData object
     const userData = {
-      firstName: $("#firstName")
-        .val()
-        .trim(),
-      lastName: $("#lastName")
-        .val()
-        .trim(),
-      address: $("#address")
-        .val()
-        .trim(),
-      city: $("#city")
-        .val()
-        .trim(),
-      state: $("#state")
-        .val()
-        .trim(),
-      zipCode: $("#zipCode")
-        .val()
-        .trim(),
-      phoneNumber: $("#phoneNumber")
-        .val()
-        .trim(),
-      email: $("#email")
-        .val()
-        .trim()
+      firstName: $("#firstName").val().trim(),
+      lastName: $("#lastName").val().trim(),
+      address: $("#address").val().trim(),
+      city: $("#city").val().trim(),
+      state: $("#state").val().trim(),
+      zipCode: $("#zipCode").val().trim(),
+      phoneNumber: $("#phoneNumber").val().trim(),
+      email: $("#email").val().trim()
     };
 
     //Send the POST request.
@@ -122,10 +86,10 @@ $(document).ready(function() {
       url: "/register",
       type: "POST",
       data: userData,
-      beforeSend: function(xhr) {
+      beforeSend: function (xhr) {
         xhr.setRequestHeader("Authorization", make_base_auth(uname, pwrd));
       }
-    }).then(function(data) {
+    }).then(function (data) {
       // store user in local storage
       localStorage.setItem("user", JSON.stringify(data));
 
@@ -137,7 +101,7 @@ $(document).ready(function() {
   /**
    * On Handyman Register Submit, Register new handyman
    */
-  $("#handyreg-submit-btn").on("click", function(event) {
+  $("#handyreg-submit-btn").on("click", function (event) {
     event.preventDefault();
     try {
 
@@ -167,7 +131,7 @@ $(document).ready(function() {
         },
         success: function (data) {
           // Reload the page to get the updated list
-          location.href = "/service-menu";
+          location.href = "/update-service";
         },
         error: function (err) {
           // Reload the page to get the updated list
@@ -186,45 +150,45 @@ $(document).ready(function() {
    * handymen and sort them based on ?
    * TODO: confirm how this works.
    */
-  $("#calendarSubmit").on("click", function(event) {
+  $("#calendarSubmit").on("click", function (event) {
     event.preventDefault();
     const jobDate = { date: $("#serviceCalendar").val(), serviceId: $("#servicesDropdown").val() };
     $.ajax({
       url: "/api/handymans", //get availability from db
       type: "GET",
       data: jobDate        //send this input to table.
-    }).then(function (jobData) {      
+    }).then(function (jobData) {
       let reqArray = [
-        {startTime: "0900", endTime: "1100"},
-        {startTime: "1000", endTime: "1200"},
-        {startTime: "1300", endTime: "1500"},
-        {startTime: "1400", endTime: "1600"},
-        {startTime: "1500", endTime: "1700"}
+        { startTime: "0900", endTime: "1100" },
+        { startTime: "1000", endTime: "1200" },
+        { startTime: "1300", endTime: "1500" },
+        { startTime: "1400", endTime: "1600" },
+        { startTime: "1500", endTime: "1700" }
       ]
       var select = $("<select>").attr("style", "display:block").attr("id", "timeSelect").appendTo($("#availability"));
-      for(i = 0; i < reqArray.length; i++){
+      for (i = 0; i < reqArray.length; i++) {
         select.append($("<option>").attr("value", i).text(reqArray[i].startTime + " until " + reqArray[i].endTime));
       }
       $("<input>").attr("type", "submit").attr("id", "bookIt").attr("value", "Book It!").appendTo($("#availability"))
     })
-    
+
   });
 
-  $(document).on("click","#bookIt", function(event){
+  $(document).on("click", "#bookIt", function (event) {
     event.preventDefault();
     console.log("click");
-      var booking = {
-        status: "scheduled",
+    var booking = {
+      status: "scheduled",
 
-        ServiceMenuId : $("#servicesDropdown").val(),
-        startDate: $("#serviceCalendar").val(),
-        sHour: $("#timeSelect").val()//time only shows slot id, not values associated.
-      }
-      console.log(booking);
-      
+      ServiceMenuId: $("#servicesDropdown").val(),
+      startDate: $("#serviceCalendar").val(),
+      sHour: $("#timeSelect").val()//time only shows slot id, not values associated.
+    }
+    console.log(booking);
+
     // })
 
-    
+
     $.ajax({
       url: "/api/request",
       type: "POST",
@@ -232,26 +196,26 @@ $(document).ready(function() {
     })
   });
 
-  $("#timeSlotForm").on("click", "tbody", "tr", function(event) {
+  $("#timeSlotForm").on("click", "tbody", "tr", function (event) {
     $(this)
       .addClass("highlight")
       .siblings()
       .removeClass("highlight");
   });
 
-  $("#timeSubmit").on("click", function(event) {
+  $("#timeSubmit").on("click", function (event) {
     var rows = isLitRow();
     var timeSlot = rows.attr("id");
     $.ajax({
       url: "/api/request/confirm",
       type: "POST",
       data: timeSlot
-    }).then(function(data) {
+    }).then(function (data) {
       console.log("data time slot sent");
     });
   });
 
-  var isLitRow = function() {
+  var isLitRow = function () {
     return $("table > tbody > tr.highlight");
   };
 
@@ -261,66 +225,57 @@ $(document).ready(function() {
    * on submit data will be posted to /login
    *  */
 
-  $("#loginForm").on("submit", function(event) {
+  $("#loginForm").on("submit", function (event) {
     event.preventDefault();
 
-    const uname = $("#loginForm [name=username]")
-      .val()
-      .trim();
-    const pwrd = $("#loginForm [name=password]")
-      .val()
-      .trim();
+    const uname = $("#loginForm [name=username]").val().trim();
+    const pwrd = $("#loginForm [name=password]").val().trim();
 
     $.ajax("/login", {
       method: "POST",
-      beforeSend: function(xhr) {
+      beforeSend: function (xhr) {
         xhr.setRequestHeader("Authorization", make_base_auth(uname, pwrd));
       },
-      success: function(data) {
+      success: function (data) {
         localStorage.setItem("access_token", JSON.stringify(data.access_token));
         location.href = "/service-menu";
       },
-      error: function(err) {
+      error: function (err) {
         alert(err.responseJSON);
         $("#loginForm")[0].reset();
       }
     });
   });
 
-  $("#handyloginForm").on("submit", function(event) {
+  $("#handyloginForm").on("submit", function (event) {
     event.preventDefault();
 
-    const loginData = {
-      username: $("#handyloginForm [name=username]")
-        .val()
-        .trim(),
-      password: $("#handyloginForm [name=password]")
-        .val()
-        .trim()
-    };
+    const uname = $("#handyloginForm [name=username]").val().trim();
+    const pwrd = $("#handyloginForm [name=password]").val().trim();
 
     $.ajax("/handyman-login", {
       method: "POST",
-      data: loginData,
-      success: function(data) {
-        localStorage.setItem("access_token", JSON.stringify(data.access_token));
-        location.href = "/service-menu";
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Authorization", make_base_auth(uname, pwrd));
       },
-      error: function(err) {
+      success: function (data) {
+        location.href = "/update-service";
+      },
+      error: function (err) {
         alert(err.responseJSON);
         $("#handyloginForm")[0].reset();
       }
     });
   });
 
-  $("#updateStatus").on("click", function(event) {
+  $("#updateStatus").on("click", function (event) {
     event.preventDefault();
     const newStatus = $("#updateServiceRequest").val();
     $.ajax({
       url: "/api/update/service",
       type: "PUT",
       data: newStatus
-    }).then(function(data) {
+    }).then(function (data) {
       console.log("status changed");
     });
   });

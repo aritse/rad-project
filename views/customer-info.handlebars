@@ -2,8 +2,8 @@
 <div class="content-container center-align">
 
     <div class="content-wrapper-svc">
-        <h2>Customer Information</h2>
-        {{!-- <div class="divider"></div> --}}
+        <h2>{{#if isHandy}}HandyMan Information{{else}}Customer Information{{/if}}</h2>
+
 
     <form role="form" class="updateCustomerForm" enctype="application/x-www-form-urlencoded">
         <input type="hidden" value={{id}} name="id" id="id">
@@ -14,7 +14,8 @@
             <input type="text" value="{{lastName}}" name="lastName" id="lastName" placeholder="Last Name">
 
             <label>Street Address</label>
-            <input type="text" value="{{streetAddress}}" name="streetAddress" id="streetAddress" placeholder="Street Address">
+            <input type="text" value="{{streetAddress}}" name="streetAddress" id="streetAddress"
+                placeholder="Street Address">
 
             <label>City</label>
             <input type="text" value="{{city}}" name="city" id="city" placeholder="City">
