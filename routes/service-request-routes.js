@@ -4,11 +4,11 @@ var moment = require("moment");
 module.exports = function(app) {
   app.post("/api/request", function(req, res) {
     // find customer by userid in session
-    req.session.user = 2;
-    // req.session.user.id = 1;
+    if (!req.session.user) // needs to be updated for production - testing currently
+      req.session.user.id = 1;
     db.Customer.findOne({include:[{
       model: db.User,
-      where: { Id: req.session.user}
+      where: { Id: req.session.user.id }
     }]}).then(userData =>{
       // store CustomerId on body
       req.body.CustomerId = userData.id;
