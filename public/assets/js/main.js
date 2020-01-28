@@ -1,5 +1,9 @@
 // Make sure we wait to attach our handlers until the DOM is fully loaded.
 $(document).ready(function () {
+
+  /**
+   * /user-info for Customers Update Form
+   */
   $(".updateCustomerForm").on("submit", function (event) {
     event.preventDefault();
     // build the userData object
