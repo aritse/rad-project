@@ -10,8 +10,10 @@ module.exports = function (app) {
             req.session.error = "";
             req.session.isHandy = false;
             res.render("index");
+        } else if (!req.session.isHandy) {
+            res.redirect("/service-menu");
         } else {
-            res.render("service-menu");
+            res.redirect("/update-service");
         }
     });
 
@@ -38,7 +40,7 @@ module.exports = function (app) {
         // reset session user
         req.session.user = false;
         req.session.error = "";
-        req.session.isHandy = false;
+        req.session.isHandy = true;
         res.render("handyman-login");
     });
 
@@ -68,7 +70,8 @@ module.exports = function (app) {
 
     app.get("/update-service", function (req, res) {
         if (req.session.user) {
-            res.render("assignments")
+            let isHandy = req.session.isHandy;
+            res.render("assignments", { isHandy });
         } else {
             res.render("login");
         }

@@ -131,7 +131,7 @@ $(document).ready(function () {
         },
         success: function (data) {
           // Reload the page to get the updated list
-          location.href = "/service-menu";
+          location.href = "/update-service";
         },
         error: function (err) {
           // Reload the page to get the updated list
@@ -259,7 +259,7 @@ $(document).ready(function () {
         xhr.setRequestHeader("Authorization", make_base_auth(uname, pwrd));
       },
       success: function (data) {
-        location.href = "/service-menu";
+        location.href = "/update-service";
       },
       error: function (err) {
         alert(err.responseJSON);
