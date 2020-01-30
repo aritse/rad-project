@@ -15,9 +15,12 @@ git clone git@github:chrisp-dev/rad-project
 ## Usage
 
 1. npm install
-2. npm start
+2. Create a file ".env" with 1 line of text: SESSION_SECRET="RANDOMTEXT912929545"
+3. npm start
 
 Open localhost:3300 in your browser. F12 to open console and debug.
+
+If deploying to Heroku, make sure to set a config SESSION_SECRET on the dyno.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an [issue](https://github.com/chrisp-dev/rad-project/issues) first to discuss what you would like to change.
