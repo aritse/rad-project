@@ -22,6 +22,10 @@ Open localhost:3300 in your browser. F12 to open console and debug.
 
 If deploying to Heroku, make sure to set a config SESSION_SECRET on the dyno.
 
+### Desktop View
+![Desktop](ss.PNG)
+***
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an [issue](https://github.com/chrisp-dev/rad-project/issues) first to discuss what you would like to change.
 
